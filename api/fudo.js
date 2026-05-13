@@ -10,30 +10,47 @@ export default async function handler(req, res) {
       body: JSON.stringify({ apiKey: 'MTNAMjYxNTgy', apiSecret: 'DjH8fSbHLDcoGWODPH2FmLxqW7OX35xA' })
     });
     const { token } = await tokenRes.json();
+    const headers = { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' };
 
-    // Traer ventas ordenadas por ID descendente (más recientes primero)
-    // y filtrar por fecha de hoy en el servidor
+    // Fecha de hoy en UTC
     const hoy = new Date();
-    const yyyy = hoy.getUTCFullYear();
-    const mm = String(hoy.getUTCMonth()+1).padStart(2,'0');
-    const dd = String(hoy.getUTCDate()).padStart(2,'0');
+    const fechaHoy = hoy.toISOString().split('T')[0];
 
-    // Traemos las últimas 500 ventas ordenadas por id desc
-    const url = `https://api.fu.do/v1alpha1/sales?sort=-id&page[size]=500`;
-    const fudoRes = await fetch(url, {
-      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
-    });
-    const raw = await fudoRes.json();
-    const todas = Array.isArray(raw) ? raw : (raw.data || []);
-
-    // Filtrar solo las de hoy por fecha UTC
-    const fechaHoy = `${yyyy}-${mm}-${dd}`;
-    const deHoy = todas.filter(s => {
-      const fecha = s.attributes?.createdAt || s.attributes?.closedAt || '';
-      return fecha.startsWith(fechaHoy);
+    // Traer ventas del día ordenadas por ID desc
+    const salesRes = await fetch(`https://api.fu.do/v1alpha1/sales?sort=-id&page[size]=500`, { headers });
+    const salesRaw = await salesRes.json();
+    const todas = salesRaw.data || [];
+    const ventas = todas.filter(s => {
+      const f = s.attributes?.createdAt || '';
+      return f.startsWith(fechaHoy);
     });
 
-    res.status(200).json({ data: deHoy, meta: { total: deHoy.length } });
+    // Recolectar todos los payment IDs del día
+    const paymentIds = [];
+    ventas.forEach(s => {
+      (s.relationships?.payments?.data || []).forEach(p => paymentIds.push(p.id));
+    });
+
+    // Traer payments en una sola llamada (hasta 500)
+    let paymentsMap = {};
+    if (paymentIds.length > 0) {
+      const pmRes = await fetch(`https://api.fu.do/v1alpha1/payments?page[size]=500&sort=-id`, { headers });
+      const pmRaw = await pmRes.json();
+      const pmData = pmRaw.data || [];
+      // Filtrar solo los del día y mapear id -> nombre del medio de pago
+      const idSet = new Set(paymentIds);
+      pmData.forEach(p => {
+        if (idSet.has(p.id)) {
+          paymentsMap[p.id] = {
+            amount: p.attributes?.amount || 0,
+            paymentMethodName: p.attributes?.paymentMethodName || p.attributes?.payment_method_name || 'Desconocido',
+            paymentMethodId: p.attributes?.paymentMethodId || p.attributes?.payment_method_id || null
+          };
+        }
+      });
+    }
+
+    res.status(200).json({ data: ventas, payments: paymentsMap, meta: { total: ventas.length } });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
