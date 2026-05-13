@@ -113,7 +113,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   <div class="content">
     <div class="status-banner loading" id="status-banner"><span>⏳</span> <span id="status-text">Conectando con Fudo...</span></div>
-
     <div class="module active" id="mod-dashboard">
       <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Estado del negocio — hoy</div>
       <div class="sem-grid">
@@ -137,7 +136,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         </div>
       </div>
     </div>
-
     <div class="module" id="mod-ventas">
       <div class="kpi-row">
         <div class="kpi"><div class="kpi-label">Total hoy</div><div class="kpi-val" id="v-total">—</div><div class="kpi-sub" id="v-total-s">—</div></div>
@@ -147,7 +145,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
       <div class="card"><div class="card-head"><div class="card-title">Todas las ventas del día</div><div style="font-size:11px;color:var(--text3);" id="v-fecha-label">—</div></div><div class="ventas-table-wrap"><table class="tbl"><thead><tr><th>Hora inicio</th><th>Hora cierre</th><th>Tipo</th><th>Origen</th><th>Cerrada por</th><th>Items</th><th style="text-align:right;">Total</th></tr></thead><tbody id="ventas-full-body"></tbody></table></div></div>
     </div>
-
     <div class="module" id="mod-medios">
       <div class="kpi-row">
         <div class="kpi"><div class="kpi-label">Total cobrado</div><div class="kpi-val" id="mp-total">—</div><div class="kpi-sub">Suma de medios</div></div>
@@ -166,26 +163,9 @@ const fmt=n=>{if(!n&&n!==0)return'—';const a=Math.abs(n);if(a>=1000000)return'
 const fmtPct=n=>n==null?'—':(n*100).toFixed(1)+'%';
 const fmtHora=s=>{if(!s)return'—';const d=new Date(s);return d.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});};
 let SALES=[];
-
-document.querySelectorAll('.nav-item[data-mod]').forEach(item=>{
-  item.addEventListener('click',()=>{
-    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
-    item.classList.add('active');
-    document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));
-    $('mod-'+item.dataset.mod).classList.add('active');
-    $('page-title').textContent={dashboard:'Dashboard',ventas:'Ventas',medios:'Medios de Pago'}[item.dataset.mod];
-  });
-});
-
+document.querySelectorAll('.nav-item[data-mod]').forEach(item=>{item.addEventListener('click',()=>{document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));item.classList.add('active');document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));$('mod-'+item.dataset.mod).classList.add('active');$('page-title').textContent={dashboard:'Dashboard',ventas:'Ventas',medios:'Medios de Pago'}[item.dataset.mod];});});
 function setStatus(type,text){const b=$('status-banner');b.className='status-banner '+type;b.innerHTML=`<span>${type==='ok'?'✅':type==='error'?'❌':'⏳'}</span> <span>${text}</span>`;}
-
-async function fudo(path,params={}){
-  const qs=new URLSearchParams({path,...params}).toString();
-  const res=await fetch(`/api/fudo?${qs}`);
-  if(!res.ok)throw new Error(`Error ${res.status}`);
-  return res.json();
-}
-
+async function fudo(path,params={}){const qs=new URLSearchParams({path,...params}).toString();const res=await fetch(`/api/fudo?${qs}`);if(!res.ok)throw new Error(`Error ${res.status}`);return res.json();}
 async function loadData(){
   setStatus('loading','Conectando con Fudo...');
   try{
@@ -194,36 +174,28 @@ async function loadData(){
     const mm=String(hoy.getMonth()+1).padStart(2,'0');
     const dd=String(hoy.getDate()).padStart(2,'0');
     const fecha=`${yyyy}-${mm}-${dd}`;
-
     setStatus('loading','Trayendo ventas...');
     const res=await fudo('/sales',{
       'filter[opened_at_gteq]':`${fecha}T00:00:00`,
       'filter[opened_at_lteq]':`${fecha}T23:59:59`,
-      'filter[state]':'closed',
       'page[size]':'500'
     });
-    SALES=res.data||res||[];
-
+    SALES=res.data||[];
     setStatus('ok',`${SALES.length} ventas · ${new Date().toLocaleTimeString('es-AR')}`);
     $('ts-text').textContent=`Fudo · ${new Date().toLocaleTimeString('es-AR')}`;
     $('page-meta').textContent=`${dd}/${mm}/${yyyy} · ${SALES.length} ventas`;
     $('date-chip').textContent=`📅 ${dd}/${mm}/${yyyy}`;
     render();
-  }catch(e){
-    setStatus('error',`Error: ${e.message}`);
-    $('ts-text').textContent='Error de conexión';
-  }
+  }catch(e){setStatus('error',`Error: ${e.message}`);}
 }
-
-const gT=s=>s.total??s.attributes?.total??0;
-const gType=s=>s.sale_type??s.attributes?.sale_type??s.kind??'—';
+const gT=s=>+(s.total??s.attributes?.total??0);
+const gType=s=>s.sale_type??s.attributes?.sale_type??s.kind??'';
 const gOrigin=s=>s.origin??s.attributes?.origin??s.source??null;
 const gOpen=s=>s.opened_at??s.attributes?.opened_at??null;
 const gClose=s=>s.closed_at??s.attributes?.closed_at??null;
 const gBy=s=>s.closed_by_name??s.attributes?.closed_by_name??'—';
 const gItems=s=>s.items??s.attributes?.items??[];
 const gPay=s=>s.payments??s.attributes?.payments??[];
-
 function render(){
   const sales=SALES;
   const total=sales.reduce((s,r)=>s+gT(r),0);
@@ -238,42 +210,26 @@ function render(){
   const tPY=py.reduce((s,r)=>s+gT(r),0);
   const tDel=delivery.reduce((s,r)=>s+gT(r),0);
   const ticket=n?total/n:0;
-
-  // Semáforos
   setSem('sem-ventas','s-ventas',fmt(total),`${n} ventas`,`${mostrador.length+mesa.length} salón · ${delivery.length} delivery`,total>0?'verde':'amarillo');
   setSem('sem-ticket','s-ticket',fmt(ticket),'Por venta',ticket>20000?'✓ Buen ticket':'—',ticket>20000?'verde':'amarillo');
-  setSem('sem-n','s-n',n.toString(),'Ventas cerradas',`${delivery.length} delivery`,n>0?'verde':'amarillo');
+  setSem('sem-n','s-n',n.toString(),'Ventas',`${delivery.length} delivery`,n>0?'verde':'amarillo');
   setSem('sem-delivery','s-delivery',fmt(tRappi+tPY),`Rappi: ${fmt(tRappi)}`,`PY: ${fmt(tPY)}`,(tRappi+tPY)>0?'verde':'amarillo');
-
-  // KPIs
   $('k-salon').textContent=fmt(tMostr);$('k-salon-s').textContent=fmtPct(total?tMostr/total:0)+' del total';
   $('k-rappi').textContent=fmt(tRappi);$('k-rappi-s').textContent=fmtPct(total?tRappi/total:0)+' del total';
   $('k-py').textContent=fmt(tPY);$('k-py-s').textContent=fmtPct(total?tPY/total:0)+' del total';
   $('k-otros').textContent=fmt(Math.max(total-tMostr-tRappi-tPY,0));$('k-otros-s').textContent='Resto';
-
-  // Medios de pago
   const mp={};
-  sales.forEach(s=>{gPay(s).forEach?.(p=>{const name=p.payment_method_name??p.name??'Desconocido';const amt=p.amount??p.total??0;mp[name]=(mp[name]||0)+amt;});});
+  sales.forEach(s=>{const pays=gPay(s);if(Array.isArray(pays))pays.forEach(p=>{const name=p.payment_method_name??p.name??'Desconocido';const amt=+(p.amount??p.total??0);mp[name]=(mp[name]||0)+amt;});});
   const maxM=Math.max(...Object.values(mp),1);
   const cols=['#C9A96E','#5A9E6F','#4A7FC0','#D4A843','#C0574A','#6A1B9A','#E65100'];
   $('medios-body').innerHTML=Object.entries(mp).sort((a,b)=>b[1]-a[1]).map(([k,v],i)=>`<div class="bar-row"><div class="bar-label">${k}</div><div class="bar-wrap"><div class="bar-fill" style="width:${v/maxM*100}%;background:${cols[i%cols.length]};"></div></div><div class="bar-val">${fmt(v)}</div><div class="bar-pct">${fmtPct(total?v/total:0)}</div></div>`).join('')||'Sin datos de medios de pago';
-
-  // Tabla ventas
   const sorted=[...sales].sort((a,b)=>new Date(gClose(b)||0)-new Date(gClose(a)||0));
   $('ventas-hoy-body').innerHTML=sorted.slice(0,8).map(s=>{const t=gType(s);const tl=t==='counter'||t==='mostrador'?'Mostrador':t==='delivery'?'Delivery':t==='table'?'Mesa':t;return`<tr><td>${fmtHora(gOpen(s))}</td><td><span class="badge ${t==='delivery'?'b-delivery':'b-mostrador'}">${tl}</span></td><td>${gOrigin(s)||'—'}</td><td class="num">${fmt(gT(s))}</td></tr>`;}).join('')||'<tr><td colspan="4" style="text-align:center;color:var(--text3);padding:20px;">Sin ventas hoy</td></tr>';
-
-  // Últimas
   $('ultimas-list').innerHTML=sorted.slice(0,3).map(s=>`<div class="alert-item"><div class="adot ${gType(s)==='delivery'?'a':'g'}"></div><div><div class="alert-text">${fmt(gT(s))}</div><div class="alert-meta">${fmtHora(gOpen(s))} · ${gType(s)}</div></div></div>`).join('');
-
-  // Resumen
   $('r-total').textContent=fmt(total);$('r-n').textContent=n;$('r-mostrador').textContent=fmt(tMostr);$('r-delivery').textContent=fmt(tDel+tRappi+tPY);
-
-  // Módulo Ventas
   $('v-total').textContent=fmt(total);$('v-total-s').textContent=n+' ventas';$('v-n').textContent=n;$('v-ticket').textContent=fmt(ticket);$('v-del-pct').textContent=fmtPct(total?(tDel+tRappi+tPY)/total:0);
   $('v-fecha-label').textContent=new Date().toLocaleDateString('es-AR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   $('ventas-full-body').innerHTML=sorted.map(s=>{const t=gType(s);const items=gItems(s);return`<tr><td>${fmtHora(gOpen(s))}</td><td>${fmtHora(gClose(s))}</td><td><span class="badge ${t==='delivery'?'b-delivery':'b-mostrador'}">${t}</span></td><td>${gOrigin(s)||'—'}</td><td>${gBy(s)}</td><td style="color:var(--text3);">${Array.isArray(items)?items.length:0}</td><td class="num">${fmt(gT(s))}</td></tr>`;}).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px;">Sin ventas</td></tr>';
-
-  // Módulo Medios
   $('mp-total').textContent=fmt(total);
   let efec=0,dig=0,cred=0;
   Object.entries(mp).forEach(([k,v])=>{const kl=k.toLowerCase();if(kl.includes('efectivo'))efec+=v;else if(kl.includes('credito')||kl.includes('crédito'))cred+=v;else dig+=v;});
@@ -282,9 +238,7 @@ function render(){
   $('mp-cred').textContent=fmt(cred);$('mp-cred-s').textContent=fmtPct(total?cred/total:0)+' del total';
   $('mp-desglose').innerHTML=Object.entries(mp).sort((a,b)=>b[1]-a[1]).map(([k,v],i)=>`<div class="bar-row" style="margin-bottom:14px;"><div class="bar-label" style="width:160px;">${k}</div><div class="bar-wrap"><div class="bar-fill" style="width:${v/maxM*100}%;background:${cols[i%cols.length]};"></div></div><div class="bar-val">${fmt(v)}</div><div class="bar-pct">${fmtPct(total?v/total:0)}</div></div>`).join('')||'Sin datos';
 }
-
 function setSem(cardId,valId,val,sub,tag,cls){const card=$(cardId);card.className='sem-card '+cls;$(valId).textContent=val;const subs=card.querySelectorAll('.sem-sub,.sem-tag');if(subs[0])subs[0].textContent=sub;if(subs[1])subs[1].textContent=tag;}
-
 window.addEventListener('load',loadData);
 setInterval(loadData,5*60*1000);
 </script>
