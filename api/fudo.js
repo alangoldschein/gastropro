@@ -18,9 +18,8 @@ export default async function handler(req, res) {
       headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
     });
     const raw = await fudoRes.json();
-    // Normalizar — siempre devolver array en "data"
-    const data = Array.isArray(raw) ? raw : (raw.data || raw.sales || raw.items || []);
-    res.status(200).json({ data, meta: raw.meta || {}, raw });
+    const data = Array.isArray(raw) ? raw : (raw.data || []);
+    res.status(200).json({ data, meta: raw.meta || {} });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
