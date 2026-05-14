@@ -13,28 +13,50 @@ export default async function handler(req, res) {
     const { token } = await tokenRes.json();
     const headers = { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' };
 
-    const now = new Date();
-    const argNow = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+    // Fecha en hora argentina (UTC-3)
+    const argNow = new Date(Date.now() - 3 * 60 * 60 * 1000);
     const pad = n => String(n).padStart(2, '0');
-    const todayArg = `${argNow.getFullYear()}-${pad(argNow.getMonth()+1)}-${pad(argNow.getDate())}`;
+    const todayArg = `${argNow.getUTCFullYear()}-${pad(argNow.getUTCMonth()+1)}-${pad(argNow.getUTCDate())}`;
+
     const dateFrom = req.query.from || todayArg;
     const dateTo   = req.query.to   || todayArg;
 
-    const fromUTC = `${dateFrom}T03:00:00Z`;
-    const toUTC   = `${dateTo}T02:59:59Z`;
+    // Convertir fecha argentina a fecha UTC para comparar con createdAt de Fudo
+    const toArgDate = iso => {
+      if (!iso) return '';
+      const arg = new Date(new Date(iso).getTime() - 3 * 60 * 60 * 1000);
+      return `${arg.getUTCFullYear()}-${pad(arg.getUTCMonth()+1)}-${pad(arg.getUTCDate())}`;
+    };
 
+    // Traer ventas con sort=-id (más recientes primero) y filtrar en código
     let allSales = [], allIncluded = [], page = 1, hasMore = true;
+
     while (hasMore) {
-      const filter = `filter[createdAt]=and(gte.${fromUTC},lte.${toUTC})`;
-      const url = `https://api.fu.do/v1alpha1/sales?${filter}&include=orders&sort=-id&page[size]=500&page[number]=${page}`;
+      const url = `https://api.fu.do/v1alpha1/sales?sort=-id&page[size]=500&page[number]=${page}&include=orders`;
       const r = await fetch(url, { headers });
       const data = await r.json();
       const items = data.data || [];
-      allSales = allSales.concat(items);
+
+      const filtered = items.filter(s => {
+        const d = toArgDate(s.attributes?.createdAt);
+        return d >= dateFrom && d <= dateTo;
+      });
+
+      allSales = allSales.concat(filtered);
       allIncluded = allIncluded.concat(data.included || []);
-      if (items.length < 500) { hasMore = false; } else { page++; if (page > 20) hasMore = false; }
+
+      // Si la venta más antigua de este batch ya es anterior a dateFrom, parar
+      const oldest = items[items.length - 1];
+      const oldestDate = oldest ? toArgDate(oldest.attributes?.createdAt) : '';
+      if (oldestDate < dateFrom || items.length < 500) {
+        hasMore = false;
+      } else {
+        page++;
+        if (page > 20) hasMore = false;
+      }
     }
 
+    // PAYMENTS con nombres reales
     const paymentIds = [];
     allSales.forEach(s => { (s.relationships?.payments?.data || []).forEach(p => paymentIds.push(p.id)); });
 
@@ -67,11 +89,13 @@ export default async function handler(req, res) {
       }
     }
 
+    // ORDERS MAP
     const ordersMap = {};
     allIncluded.forEach(inc => {
       if (inc.type === 'Order') ordersMap[inc.id] = inc.attributes?.origin || 'unknown';
     });
 
+    // TOTALES
     let totalBruto = 0, totalSalon = 0, totalDelivery = 0, countSalon = 0, countDelivery = 0;
     const mediosPago = {};
 
