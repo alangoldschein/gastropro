@@ -14,10 +14,22 @@ export default async function handler(req, res) {
     const headers = { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' };
 
     const now = new Date();
-    const todayUTC = now.toISOString().split('T')[0];
-    const dateFrom = req.query.from || todayUTC;
-    const dateTo   = req.query.to   || todayUTC;
+    // Fecha de hoy en Argentina (UTC-3)
+    const argNow = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+    const todayArg = argNow.toISOString().split('T')[0];
 
+    const dateFrom = req.query.from || todayArg;
+    const dateTo   = req.query.to   || todayArg;
+
+    // Función para convertir fecha UTC de Fudo a fecha argentina
+    const toArgDate = (isoString) => {
+      if (!isoString) return '';
+      const utc = new Date(isoString);
+      const arg = new Date(utc.getTime() - 3 * 60 * 60 * 1000);
+      return arg.toISOString().split('T')[0];
+    };
+
+    // Traer todas las ventas paginando
     let allSales = [];
     let page = 1;
     let hasMore = true;
@@ -28,15 +40,17 @@ export default async function handler(req, res) {
       const data = await r.json();
       const items = data.data || [];
 
+      // Filtrar por rango de fechas en hora argentina
       const filtered = items.filter(s => {
-        const d = (s.attributes?.createdAt || '').split('T')[0];
+        const d = toArgDate(s.attributes?.createdAt);
         return d >= dateFrom && d <= dateTo;
       });
 
       allSales = allSales.concat(filtered);
 
+      // Si alguna venta del batch ya es anterior al dateFrom en hora argentina, no hay más
       const hasOlder = items.some(s => {
-        const d = (s.attributes?.createdAt || '').split('T')[0];
+        const d = toArgDate(s.attributes?.createdAt);
         return d < dateFrom;
       });
 
@@ -48,6 +62,7 @@ export default async function handler(req, res) {
       }
     }
 
+    // Calcular totales (excluir canceladas)
     let totalBruto = 0;
     let totalSalon = 0;
     let totalDelivery = 0;
