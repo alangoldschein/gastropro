@@ -36,6 +36,7 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:v
 .nav-item:hover:not(.active) { background:var(--bg); color:var(--text); }
 .nav-item.active { background:var(--accent-bg); color:var(--accent); font-weight:600; }
 .nav-item.disabled { opacity:0.35; cursor:default; pointer-events:none; }
+.nav-icon { font-size:13px; width:16px; text-align:center; }
 .main { margin-left:var(--sidebar); flex:1; display:flex; flex-direction:column; min-height:100vh; }
 .topbar { background:var(--surface); border-bottom:1px solid var(--border); padding:0 28px; height:56px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:20; }
 .topbar-left { display:flex; align-items:center; gap:16px; }
@@ -111,12 +112,11 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:v
 .sum-lbl { font-size:9.5px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:1px; }
 .sum-val { font-size:17px; font-weight:800; color:var(--text); margin-top:3px; letter-spacing:-0.3px; }
 .sum-val.accent { color:var(--accent); }
+.sum-val.green { color:var(--green); }
 .empty { text-align:center; padding:40px 20px; color:var(--text3); font-size:13px; }
 .empty-icon { font-size:32px; margin-bottom:8px; }
 .period-display { font-size:12px; color:var(--text3); font-weight:500; }
 .period-display strong { color:var(--text); }
-.ventas-filters { display:flex; gap:8px; padding:12px 18px; border-bottom:1px solid var(--border2); flex-wrap:wrap; }
-.filter-select { padding:5px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; font-family:inherit; color:var(--text2); background:var(--surface); outline:none; cursor:pointer; }
 .spinner { width:16px; height:16px; border:2px solid rgba(0,0,0,0.1); border-top-color:var(--amber); border-radius:50%; animation:spin 0.7s linear infinite; display:inline-block; }
 @keyframes spin { to { transform:rotate(360deg); } }
 .menu-btn { display:none; width:36px; height:36px; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:6px; cursor:pointer; background:var(--surface); font-size:16px; }
@@ -160,13 +160,13 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:v
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">Módulos</div>
-    <div class="nav-item active" data-mod="dashboard" onclick="navigate(this)"><span>⬡</span> Dashboard</div>
-    <div class="nav-item" data-mod="ventas" onclick="navigate(this)"><span>↗</span> Ventas</div>
-    <div class="nav-item" data-mod="medios" onclick="navigate(this)"><span>◈</span> Medios de pago</div>
+    <div class="nav-item active" data-mod="dashboard" onclick="navigate(this)"><span class="nav-icon">⬡</span> Dashboard</div>
+    <div class="nav-item" data-mod="ventas" onclick="navigate(this)"><span class="nav-icon">↗</span> Ventas</div>
+    <div class="nav-item" data-mod="medios" onclick="navigate(this)"><span class="nav-icon">◈</span> Medios de pago</div>
     <div class="nav-section">Próximamente</div>
-    <div class="nav-item disabled"><span>$</span> Cash Flow</div>
-    <div class="nav-item disabled"><span>≡</span> P&L</div>
-    <div class="nav-item disabled"><span>◻</span> Egresos</div>
+    <div class="nav-item disabled"><span class="nav-icon">$</span> Cash Flow</div>
+    <div class="nav-item disabled"><span class="nav-icon">≡</span> P&L</div>
+    <div class="nav-item disabled"><span class="nav-icon">◻</span> Egresos</div>
   </nav>
 </aside>
 <main class="main">
@@ -199,7 +199,7 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:v
     </div>
   </div>
   <div class="content">
-    <div class="status-banner loading" id="statusBanner"><div class="spinner"></div><span id="statusText">Conectando con Fudo...</span></div>
+    <div class="status-banner loading" id="statusBanner"><div class="spinner"></div><span>Conectando con Fudo...</span></div>
 
     <!-- DASHBOARD -->
     <div class="module active" id="mod-dashboard">
@@ -233,7 +233,7 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:v
         <div class="kpi2"><div class="kpi2-label">Salón / Mostrador</div><div class="kpi2-value" id="d-salon">—</div><div class="kpi2-sub" id="d-salon-s">—</div></div>
         <div class="kpi2"><div class="kpi2-label">Rappi</div><div class="kpi2-value" id="d-rappi">—</div><div class="kpi2-sub" id="d-rappi-s">—</div></div>
         <div class="kpi2"><div class="kpi2-label">PedidosYa</div><div class="kpi2-value" id="d-py">—</div><div class="kpi2-sub" id="d-py-s">—</div></div>
-        <div class="kpi2"><div class="kpi2-label">Otros canales</div><div class="kpi2-value" id="d-otros">—</div><div class="kpi2-sub" id="d-otros-s">—</div></div>
+        <div class="kpi2"><div class="kpi2-label">Otras ventas</div><div class="kpi2-value" id="d-otros">—</div><div class="kpi2-sub" id="d-otros-s">—</div></div>
       </div>
       <div class="body-grid">
         <div class="card">
@@ -275,37 +275,83 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:v
     <!-- VENTAS -->
     <div class="module" id="mod-ventas">
       <div class="kpi-grid" style="margin-bottom:16px">
-        <div class="kpi-card featured"><div class="kpi-label">Total del período</div><div class="kpi-value accent" id="v-total">—</div><div class="kpi-sub" id="v-total-s">—</div></div>
-        <div class="kpi-card"><div class="kpi-label">Ventas</div><div class="kpi-value" id="v-count">—</div><div class="kpi-sub">Cerradas</div></div>
-        <div class="kpi-card"><div class="kpi-label">Ticket promedio</div><div class="kpi-value" id="v-ticket">—</div><div class="kpi-sub">Por venta</div></div>
-        <div class="kpi-card"><div class="kpi-label">% Delivery</div><div class="kpi-value" id="v-del-pct">—</div><div class="kpi-sub" id="v-del-s">—</div></div>
+        <div class="kpi-card featured">
+          <div class="kpi-label">Total del período</div>
+          <div class="kpi-value accent" id="v-total">—</div>
+          <div class="kpi-sub" id="v-total-sub">—</div>
+          <div class="kpi-tag accent" id="v-vs">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Ventas cerradas</div>
+          <div class="kpi-value" id="v-count">—</div>
+          <div class="kpi-sub" id="v-count-sub">—</div>
+          <div class="kpi-tag blue" id="v-count-vs">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Ticket promedio</div>
+          <div class="kpi-value" id="v-ticket">—</div>
+          <div class="kpi-sub">Por venta cerrada</div>
+          <div class="kpi-tag green" id="v-ticket-vs">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Salón vs Delivery</div>
+          <div class="kpi-value" id="v-salon-pct">—</div>
+          <div class="kpi-sub" id="v-salon-sub">—</div>
+          <div class="kpi-tag amber" id="v-del-tag">—</div>
+        </div>
+      </div>
+      <div class="body-grid" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Medios de pago</div><span class="card-meta" id="v-mp-meta">—</span></div>
+          <div class="card-body"><div class="bar-list" id="v-medios"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Ticket promedio por canal</div></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div class="sum-item">
+                <div class="sum-lbl">Salón / Mostrador</div>
+                <div class="sum-val accent" id="v-ticket-salon">—</div>
+                <div style="font-size:10.5px;color:var(--text3);margin-top:4px" id="v-ticket-salon-n">—</div>
+              </div>
+              <div class="sum-item">
+                <div class="sum-lbl">Delivery</div>
+                <div class="sum-val green" id="v-ticket-delivery">—</div>
+                <div style="font-size:10.5px;color:var(--text3);margin-top:4px" id="v-ticket-delivery-n">—</div>
+              </div>
+              <div class="sum-item">
+                <div class="sum-lbl">Total salón</div>
+                <div class="sum-val" id="v-total-salon">—</div>
+                <div style="font-size:10.5px;color:var(--text3);margin-top:4px" id="v-salon-pct2">—</div>
+              </div>
+              <div class="sum-item">
+                <div class="sum-lbl">Total delivery</div>
+                <div class="sum-val" id="v-total-delivery">—</div>
+                <div style="font-size:10.5px;color:var(--text3);margin-top:4px" id="v-delivery-pct2">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Resumen</div></div>
+          <div class="card-body">
+            <div class="sum-grid">
+              <div class="sum-item"><div class="sum-lbl">Total bruto</div><div class="sum-val accent" id="v-sum-total">—</div></div>
+              <div class="sum-item"><div class="sum-lbl">Ventas</div><div class="sum-val" id="v-sum-count">—</div></div>
+              <div class="sum-item"><div class="sum-lbl">Período anterior</div><div class="sum-val" id="v-sum-prev">—</div></div>
+              <div class="sum-item"><div class="sum-lbl">Variación</div><div class="sum-val" id="v-sum-var">—</div></div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="card">
-        <div class="card-head"><div class="card-title">Todas las ventas</div><span class="card-meta" id="v-count-meta">—</span></div>
-        <div class="ventas-filters">
-          <select class="filter-select" id="v-filter-tipo" onchange="filterVentas()">
-            <option value="">Todos los tipos</option>
-            <option value="TAKEAWAY">Salón / Mostrador</option>
-            <option value="DELIVERY">Delivery</option>
-          </select>
-          <select class="filter-select" id="v-filter-state" onchange="filterVentas()">
-            <option value="">Todos los estados</option>
-            <option value="CLOSED">Cerradas</option>
-            <option value="CANCELED">Canceladas</option>
-          </select>
+        <div class="card-head">
+          <div class="card-title">Distribución por hora</div>
+          <span class="card-meta">ventas por franja horaria</span>
         </div>
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>Fecha</th><th>Inicio</th><th>Cierre</th><th>Tipo</th><th>Cliente</th><th>Medio pago</th><th>Estado</th><th style="text-align:right">Total</th></tr></thead>
-            <tbody id="v-tbody"></tbody>
-          </table>
-        </div>
-        <div style="padding:12px 18px;border-top:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text3)">
-          <span id="v-page-info">—</span>
-          <div style="display:flex;gap:6px">
-            <button class="btn" id="v-prev" onclick="changePage(-1)">← Anterior</button>
-            <button class="btn" id="v-next" onclick="changePage(1)">Siguiente →</button>
-          </div>
+        <div class="card-body" style="padding:20px 18px">
+          <div id="v-hora-chart" style="display:flex;align-items:flex-end;gap:4px;height:80px"></div>
+          <div id="v-hora-labels" style="display:flex;gap:4px;margin-top:6px"></div>
         </div>
       </div>
     </div>
@@ -325,7 +371,7 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:v
         </div>
         <div class="card">
           <div class="card-head"><div class="card-title">Configuración</div><span class="card-meta" style="color:var(--amber)">Próximamente</span></div>
-          <div class="card-body"><p style="font-size:12.5px;color:var(--text3);line-height:1.7">Acá vas a poder mapear los medios de pago de Fudo a las categorías de GastroPro: Efectivo, QR, Débito, Crédito, Delivery online.</p></div>
+          <div class="card-body"><p style="font-size:12.5px;color:var(--text3);line-height:1.6">Acá vas a poder mapear cada medio de pago de Fudo a las categorías de GastroPro: Efectivo, QR, Débito, Crédito, Delivery online.</p></div>
         </div>
       </div>
     </div>
@@ -334,22 +380,20 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:v
 
 <script>
 const $ = id => document.getElementById(id);
-const fmt = n => { if (n==null||isNaN(n)) return '—'; return '$'+Math.round(n).toLocaleString('es-AR'); };
+const fmt = n => { if (n==null||isNaN(n)) return '—'; if(Math.abs(n)>=1000000) return '$'+(n/1000000).toFixed(2).replace('.',',')+' M'; return '$'+Math.round(n).toLocaleString('es-AR'); };
 const fmtPct = n => (n==null||isNaN(n)) ? '—' : (n*100).toFixed(1)+'%';
 const fmtHora = s => { if(!s) return '—'; try { return new Date(new Date(s).getTime()-3*60*60*1000).toTimeString().slice(0,5); } catch(e){return'—';} };
 const fmtFecha = s => { if(!s) return '—'; try { return new Date(new Date(s).getTime()-3*60*60*1000).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'}); } catch(e){return'—';} };
 
 let SALES=[], SUMMARY={}, PAYMENTS={}, ORDERS={};
 let currentPeriod='today', currentFrom='', currentTo='';
-let ventasFiltered=[], currentVentasPage=0;
-const PER_PAGE=50;
 
 function getDateRange(period) {
   const now=new Date(), pad=n=>String(n).padStart(2,'0');
   const f=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
   switch(period) {
     case 'today':     { const t=f(now); return {from:t,to:t}; }
-    case 'yesterday': { const y=new Date(now); y.setDate(y.getDate()-1); const t=f(y); return {from:t,to:t}; }
+    case 'yesterday': { const y=new Date(now); y.setDate(y.getDate()-1); return {from:f(y),to:f(y)}; }
     case 'week':      { const m=new Date(now); m.setDate(now.getDate()-now.getDay()+(now.getDay()===0?-6:1)); return {from:f(m),to:f(now)}; }
     case 'month':     return {from:`${now.getFullYear()}-${pad(now.getMonth()+1)}-01`,to:f(now)};
     case 'lastmonth': { const lm=new Date(now.getFullYear(),now.getMonth()-1,1); const e=new Date(now.getFullYear(),now.getMonth(),0); return {from:f(lm),to:f(e)}; }
@@ -360,10 +404,8 @@ function getDateRange(period) {
 
 function setPeriod(btn) {
   document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  currentPeriod=btn.dataset.period;
-  const r=getDateRange(currentPeriod);
-  currentFrom=r.from; currentTo=r.to;
+  btn.classList.add('active'); currentPeriod=btn.dataset.period;
+  const r=getDateRange(currentPeriod); currentFrom=r.from; currentTo=r.to;
   $('dateFrom').value=currentFrom; $('dateTo').value=currentTo;
   updatePeriodDisplay(); loadData();
 }
@@ -422,7 +464,6 @@ function renderDashboard() {
   const delivery=s.filter(r=>(r.attributes?.saleType||'').toUpperCase()==='DELIVERY');
   const tSalon=salon.reduce((a,r)=>a+(r.attributes?.total||0),0);
   const tDelivery=delivery.reduce((a,r)=>a+(r.attributes?.total||0),0);
-
   let tRappi=0,tPY=0,tJusto=0,tOtro=0;
   delivery.forEach(s=>{
     const orders=s.relationships?.orders?.data||[], t=s.attributes?.total||0;
@@ -433,7 +474,6 @@ function renderDashboard() {
     else if(origin.includes('justo')) tJusto+=t;
     else tOtro+=t;
   });
-
   $('d-total').textContent=fmt(total); $('d-total-sub').textContent=n+' ventas cerradas';
   $('d-total-tag').textContent=salon.length+' salón · '+delivery.length+' delivery';
   $('d-ticket').textContent=fmt(ticket); $('d-ticket-big').textContent=fmt(ticket);
@@ -449,12 +489,10 @@ function renderDashboard() {
   $('d-sum-total').textContent=fmt(total); $('d-sum-count').textContent=n;
   $('d-sum-salon').textContent=fmt(tSalon); $('d-sum-delivery').textContent=fmt(tDelivery);
   $('d-mp-meta').textContent=n+' ventas'; $('d-ventas-count').textContent=n+' registros';
-
   const medios=SUMMARY.mediosPago||[], maxMP=medios.length>0?medios[0].total:1;
   $('d-medios').innerHTML=medios.length>0
     ?medios.map(m=>`<div class="bar-row"><div class="bar-name">${m.nombre}</div><div class="bar-track"><div class="bar-fill" style="width:${m.total/maxMP*100}%"></div></div><div class="bar-val">${fmt(m.total)}</div></div>`).join('')
     :'<div class="empty"><div class="empty-icon">💳</div>Sin datos</div>';
-
   const sorted=[...s].sort((a,b)=>new Date(b.attributes?.closedAt||0)-new Date(a.attributes?.closedAt||0));
   $('d-ventas-body').innerHTML=sorted.slice(0,8).map(r=>{
     const a=r.attributes||{}, tipo=(a.saleType||'').toUpperCase();
@@ -466,60 +504,70 @@ function renderDashboard() {
 }
 
 function renderVentas() {
-  const s=SALES, total=s.reduce((a,r)=>a+(r.attributes?.total||0),0), n=s.length;
-  const del=s.filter(r=>(r.attributes?.saleType||'').toUpperCase()==='DELIVERY');
-  const tDel=del.reduce((a,r)=>a+(r.attributes?.total||0),0);
-  $('v-total').textContent=fmt(total); $('v-total-s').textContent=n+' ventas cerradas';
-  $('v-count').textContent=n; $('v-ticket').textContent=fmt(n?total/n:0);
-  $('v-del-pct').textContent=fmtPct(total?tDel/total:0); $('v-del-s').textContent=del.length+' pedidos';
-  filterVentas();
-}
+  const sales=SALES, total=sales.reduce((a,r)=>a+(r.attributes?.total||0),0), n=sales.length;
+  const salon=sales.filter(s=>(s.attributes?.saleType||'').toUpperCase()!=='DELIVERY');
+  const delivery=sales.filter(s=>(s.attributes?.saleType||'').toUpperCase()==='DELIVERY');
+  const tSalon=salon.reduce((a,r)=>a+(r.attributes?.total||0),0);
+  const tDelivery=delivery.reduce((a,r)=>a+(r.attributes?.total||0),0);
+  const ticket=n?total/n:0;
+  const ticketSalon=salon.length?tSalon/salon.length:0;
+  const ticketDelivery=delivery.length?tDelivery/delivery.length:0;
+  const prevTotal=SUMMARY.prevTotal||0, prevCount=SUMMARY.prevCount||0;
+  const varPct=prevTotal>0?((total-prevTotal)/prevTotal):null;
+  const varCountPct=prevCount>0?((n-prevCount)/prevCount):null;
+  const varSign=v=>v===null?'—':(v>=0?'▲ ':'▼ ')+Math.abs(v*100).toFixed(1)+'%';
 
-function filterVentas() {
-  const tipoF=$('v-filter-tipo').value, stateF=$('v-filter-state').value;
-  ventasFiltered=SALES.filter(r=>{
-    const a=r.attributes||{};
-    if(tipoF&&(a.saleType||'').toUpperCase()!==tipoF) return false;
-    if(stateF&&(a.saleState||'').toUpperCase()!==stateF) return false;
-    return true;
-  }).sort((a,b)=>new Date(b.attributes?.closedAt||0)-new Date(a.attributes?.closedAt||0));
-  currentVentasPage=0; renderVentasPage();
-}
+  $('v-total').textContent=fmt(total); $('v-total-sub').textContent=n+' ventas cerradas';
+  $('v-vs').textContent=prevTotal>0?varSign(varPct)+' vs período anterior':'Sin comparación';
+  $('v-count').textContent=n; $('v-count-sub').textContent=salon.length+' salón · '+delivery.length+' delivery';
+  $('v-count-vs').textContent=prevCount>0?varSign(varCountPct)+' vs anterior':'—';
+  $('v-ticket').textContent=fmt(ticket);
+  $('v-ticket-vs').textContent=ticket>20000?'✓ Buen ticket':'Ticket moderado';
+  $('v-salon-pct').textContent=fmtPct(total?tSalon/total:0);
+  $('v-salon-sub').textContent=fmt(tSalon)+' salón';
+  $('v-del-tag').textContent=fmtPct(total?tDelivery/total:0)+' delivery';
+  $('v-ticket-salon').textContent=fmt(ticketSalon); $('v-ticket-salon-n').textContent=salon.length+' ventas';
+  $('v-ticket-delivery').textContent=fmt(ticketDelivery); $('v-ticket-delivery-n').textContent=delivery.length+' ventas';
+  $('v-total-salon').textContent=fmt(tSalon); $('v-salon-pct2').textContent=fmtPct(total?tSalon/total:0)+' del total';
+  $('v-total-delivery').textContent=fmt(tDelivery); $('v-delivery-pct2').textContent=fmtPct(total?tDelivery/total:0)+' del total';
+  $('v-sum-total').textContent=fmt(total); $('v-sum-count').textContent=n;
+  $('v-sum-prev').textContent=prevTotal>0?fmt(prevTotal):'Sin datos';
+  $('v-sum-var').textContent=varPct!==null?varSign(varPct):'—';
+  if($('v-sum-var')) $('v-sum-var').style.color=varPct===null?'':varPct>=0?'var(--green)':'var(--red)';
 
-function renderVentasPage() {
-  const start=currentVentasPage*PER_PAGE, end=start+PER_PAGE;
-  const page=ventasFiltered.slice(start,end), total=ventasFiltered.length;
-  $('v-count-meta').textContent=total+' registros';
-  $('v-page-info').textContent=`${start+1}–${Math.min(end,total)} de ${total}`;
-  $('v-prev').disabled=currentVentasPage===0; $('v-next').disabled=end>=total;
-  $('v-tbody').innerHTML=page.map(r=>{
-    const a=r.attributes||{};
-    const tipo=(a.saleType||'').toUpperCase(), state=(a.saleState||'').toUpperCase();
-    const nombre=a.customerName||a.anonymousCustomer?.name||'—';
-    const pays=r.relationships?.payments?.data||[];
-    const mp=pays.length>0?(PAYMENTS[pays[0].id]?.paymentMethodName||'—'):'—';
-    return `<tr>
-      <td>${fmtFecha(a.createdAt)}</td><td>${fmtHora(a.createdAt)}</td><td>${fmtHora(a.closedAt)}</td>
-      <td><span class="badge ${tipo==='DELIVERY'?'delivery':'salon'}">${tipo==='DELIVERY'?'Delivery':'Salón'}</span></td>
-      <td>${nombre}</td><td>${mp}</td>
-      <td><span class="badge ${state==='CANCELED'?'canceled':'salon'}">${state==='CANCELED'?'Cancelada':'Cerrada'}</span></td>
-      <td class="num">${fmt(a.total||0)}</td>
-    </tr>`;
-  }).join('')||'<tr><td colspan="8" class="empty">Sin ventas</td></tr>';
-}
+  const medios=SUMMARY.mediosPago||[], maxMP=medios.length>0?medios[0].total:1;
+  $('v-mp-meta').textContent=n+' ventas';
+  $('v-medios').innerHTML=medios.length>0
+    ?medios.map(m=>{
+        const pct=total?m.total/total:0;
+        return `<div class="bar-row"><div class="bar-name">${m.nombre}</div><div class="bar-track"><div class="bar-fill" style="width:${m.total/maxMP*100}%"></div></div><div class="bar-val">${fmt(m.total)} <span style="color:var(--text3);font-size:10.5px;font-weight:400">${fmtPct(pct)}</span></div></div>`;
+      }).join('')
+    :'<div class="empty"><div class="empty-icon">💳</div>Sin datos</div>';
 
-function changePage(dir) {
-  const maxPage=Math.ceil(ventasFiltered.length/PER_PAGE)-1;
-  currentVentasPage=Math.max(0,Math.min(maxPage,currentVentasPage+dir));
-  renderVentasPage();
+  const franjas=Array.from({length:14},(_,i)=>({h:i+10,total:0,count:0}));
+  sales.forEach(s=>{
+    const iso=s.attributes?.createdAt; if(!iso) return;
+    const arg=new Date(new Date(iso).getTime()-3*60*60*1000);
+    const h=arg.getUTCHours(), idx=h-10;
+    if(idx>=0&&idx<14){franjas[idx].total+=s.attributes?.total||0;franjas[idx].count++;}
+  });
+  const maxF=Math.max(...franjas.map(f=>f.total),1);
+  $('v-hora-chart').innerHTML=franjas.map(f=>{
+    const pct=f.total/maxF*100, color=f.count>0?'var(--accent)':'var(--border)';
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px" title="${f.count>0?f.count+' ventas · '+fmt(f.total):''}">
+      <div style="font-size:9px;color:var(--text3)">${f.count>0?fmt(f.total):''}</div>
+      <div style="width:100%;height:${Math.max(pct,2)}%;background:${color};border-radius:3px 3px 0 0;min-height:3px"></div>
+    </div>`;
+  }).join('');
+  $('v-hora-labels').innerHTML=franjas.map(f=>`<div style="flex:1;text-align:center;font-size:9.5px;color:var(--text3)">${f.h}h</div>`).join('');
 }
 
 function renderMedios() {
   const medios=SUMMARY.mediosPago||[], total=medios.reduce((a,m)=>a+m.total,0)||SALES.reduce((a,r)=>a+(r.attributes?.total||0),0);
   $('mp-total').textContent=fmt(total);
-  const classify=n=>{ const s=(n||'').toLowerCase(); if(s.includes('efectivo')||s.includes('cash')) return 'efec'; if(s.includes('qr')||s.includes('nave')||s.includes('mercado')||s.includes('modo')) return 'dig'; if(s.includes('crédit')||s.includes('debit')||s.includes('visa')||s.includes('master')) return 'card'; return 'otro'; };
+  const classify=n=>{const s=(n||'').toLowerCase();if(s.includes('efectivo')||s.includes('cash'))return'efec';if(s.includes('qr')||s.includes('nave')||s.includes('mercado')||s.includes('modo'))return'dig';if(s.includes('crédit')||s.includes('debit')||s.includes('visa')||s.includes('master'))return'card';return'otro';};
   let tE=0,tD=0,tC=0;
-  medios.forEach(m=>{ const t=classify(m.nombre); if(t==='efec') tE+=m.total; else if(t==='dig') tD+=m.total; else if(t==='card') tC+=m.total; });
+  medios.forEach(m=>{const t=classify(m.nombre);if(t==='efec')tE+=m.total;else if(t==='dig')tD+=m.total;else if(t==='card')tC+=m.total;});
   $('mp-efec').textContent=tE>0?fmt(tE):'—'; $('mp-efec-s').textContent=tE>0?fmtPct(total?tE/total:0)+' del total':'Sin datos';
   $('mp-dig').textContent=tD>0?fmt(tD):'—'; $('mp-dig-s').textContent=tD>0?fmtPct(total?tD/total:0)+' del total':'Sin datos';
   $('mp-card').textContent=tC>0?fmt(tC):'—'; $('mp-card-s').textContent=tC>0?fmtPct(total?tC/total:0)+' del total':'Sin datos';
@@ -536,7 +584,7 @@ window.addEventListener('load',()=>{
   $('dateFrom').value=today; $('dateTo').value=today;
   updatePeriodDisplay(); loadData();
 });
-setInterval(()=>{ if(currentPeriod==='today') loadData(); },5*60*1000);
+setInterval(()=>{if(currentPeriod==='today')loadData();},5*60*1000);
 </script>
 </body>
 </html>
