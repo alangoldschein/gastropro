@@ -13,53 +13,42 @@ export default async function handler(req, res) {
     const { token } = await tokenRes.json();
     const headers = { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' };
 
-    // Fecha en hora argentina (UTC-3)
-    const argNow = new Date(Date.now() - 3 * 60 * 60 * 1000);
+    const now = new Date();
+    const argNow = new Date(now.getTime() - 3 * 60 * 60 * 1000);
     const pad = n => String(n).padStart(2, '0');
     const todayArg = `${argNow.getUTCFullYear()}-${pad(argNow.getUTCMonth()+1)}-${pad(argNow.getUTCDate())}`;
-
     const dateFrom = req.query.from || todayArg;
     const dateTo   = req.query.to   || todayArg;
 
-    // Convertir fecha argentina a fecha UTC para comparar con createdAt de Fudo
     const toArgDate = iso => {
       if (!iso) return '';
-      const arg = new Date(new Date(iso).getTime() - 3 * 60 * 60 * 1000);
+      const d = new Date(iso);
+      const arg = new Date(d.getTime() - 3 * 60 * 60 * 1000);
       return `${arg.getUTCFullYear()}-${pad(arg.getUTCMonth()+1)}-${pad(arg.getUTCDate())}`;
     };
 
-    // Traer ventas con sort=-id (más recientes primero) y filtrar en código
+    // ── VENTAS con origin correcto ──
     let allSales = [], allIncluded = [], page = 1, hasMore = true;
-
     while (hasMore) {
-      const url = `https://api.fu.do/v1alpha1/sales?sort=-id&page[size]=500&page[number]=${page}&include=orders`;
+      const url = `https://api.fu.do/v1alpha1/sales?sort=-id&page[size]=500&page[number]=${page}&include=orders&fields[sale]=orders&fields[order]=origin`;
       const r = await fetch(url, { headers });
       const data = await r.json();
       const items = data.data || [];
-
       const filtered = items.filter(s => {
         const d = toArgDate(s.attributes?.createdAt);
         return d >= dateFrom && d <= dateTo;
       });
-
       allSales = allSales.concat(filtered);
       allIncluded = allIncluded.concat(data.included || []);
-
-      // Si la venta más antigua de este batch ya es anterior a dateFrom, parar
       const oldest = items[items.length - 1];
       const oldestDate = oldest ? toArgDate(oldest.attributes?.createdAt) : '';
-      if (oldestDate < dateFrom || items.length < 500) {
-        hasMore = false;
-      } else {
-        page++;
-        if (page > 20) hasMore = false;
-      }
+      if (oldestDate < dateFrom || items.length < 500) hasMore = false;
+      else { page++; if (page > 20) hasMore = false; }
     }
 
-    // PAYMENTS con nombres reales
+    // ── PAYMENTS ──
     const paymentIds = [];
     allSales.forEach(s => { (s.relationships?.payments?.data || []).forEach(p => paymentIds.push(p.id)); });
-
     const paymentsMap = {};
     if (paymentIds.length > 0) {
       const idSet = new Set(paymentIds);
@@ -89,16 +78,56 @@ export default async function handler(req, res) {
       }
     }
 
-    // ORDERS MAP
+    // ── ORDERS MAP ──
     const ordersMap = {};
     allIncluded.forEach(inc => {
       if (inc.type === 'Order') ordersMap[inc.id] = inc.attributes?.origin || 'unknown';
     });
 
-    // TOTALES
+    // ── EXPENSES ──
+    let allExpenses = [];
+    let expPage = 1, expHasMore = true;
+    while (expHasMore) {
+      const expUrl = `https://api.fu.do/v1alpha1/expenses?sort=-id&page[size]=500&page[number]=${expPage}&include=expenseCategory,provider,paymentMethod&fields[expense]=amount,date,description,status,expenseCategory,provider,paymentMethod&fields[expenseCategory]=name&fields[provider]=name&fields[paymentMethod]=name`;
+      const expRes = await fetch(expUrl, { headers });
+      const expData = await expRes.json();
+      const expItems = expData.data || [];
+      const expIncluded = expData.included || [];
+
+      // Mapas de includes
+      const catMap = {}, provMap = {}, pmMap = {};
+      expIncluded.forEach(inc => {
+        if (inc.type === 'ExpenseCategory') catMap[inc.id] = inc.attributes?.name || 'Sin categoría';
+        if (inc.type === 'Provider') provMap[inc.id] = inc.attributes?.name || '—';
+        if (inc.type === 'PaymentMethod') pmMap[inc.id] = inc.attributes?.name || '—';
+      });
+
+      // Filtrar por fecha argentina
+      const filtered = expItems.filter(e => {
+        const d = (e.attributes?.date || '').slice(0, 10);
+        return d >= dateFrom && d <= dateTo;
+      }).map(e => ({
+        id: e.id,
+        amount: e.attributes?.amount || 0,
+        date: e.attributes?.date || '',
+        description: e.attributes?.description || '—',
+        status: e.attributes?.status || '',
+        category: catMap[e.relationships?.expenseCategory?.data?.id] || 'Sin categoría',
+        provider: provMap[e.relationships?.provider?.data?.id] || '—',
+        paymentMethod: pmMap[e.relationships?.paymentMethod?.data?.id] || '—'
+      }));
+
+      allExpenses = allExpenses.concat(filtered);
+
+      const oldestExp = expItems[expItems.length - 1];
+      const oldestExpDate = oldestExp ? (oldestExp.attributes?.date || '').slice(0, 10) : '';
+      if (oldestExpDate < dateFrom || expItems.length < 500) expHasMore = false;
+      else { expPage++; if (expPage > 20) expHasMore = false; }
+    }
+
+    // ── TOTALES VENTAS ──
     let totalBruto = 0, totalSalon = 0, totalDelivery = 0, countSalon = 0, countDelivery = 0;
     const mediosPago = {};
-
     allSales.forEach(s => {
       const attr = s.attributes || {};
       if (attr.saleState === 'CANCELED') return;
@@ -118,6 +147,18 @@ export default async function handler(req, res) {
       });
     });
 
+    // ── TOTALES EGRESOS ──
+    const totalEgresos = allExpenses.reduce((a, e) => a + e.amount, 0);
+    const egresosPorCategoria = {};
+    allExpenses.forEach(e => {
+      if (!egresosPorCategoria[e.category]) egresosPorCategoria[e.category] = { total: 0, count: 0 };
+      egresosPorCategoria[e.category].total += e.amount;
+      egresosPorCategoria[e.category].count++;
+    });
+    const egresosCategorias = Object.entries(egresosPorCategoria)
+      .sort((a, b) => b[1].total - a[1].total)
+      .map(([nombre, data]) => ({ nombre, total: data.total, count: data.count }));
+
     const totalVentas = countSalon + countDelivery;
     const mediosPagoOrdenados = Object.entries(mediosPago)
       .sort((a, b) => b[1].total - a[1].total)
@@ -127,14 +168,18 @@ export default async function handler(req, res) {
       data: allSales,
       payments: paymentsMap,
       orders: ordersMap,
+      expenses: allExpenses,
       summary: {
         totalBruto, totalSalon, totalDelivery,
         countTotal: totalVentas, countSalon, countDelivery,
         ticketPromedio: totalVentas > 0 ? Math.round(totalBruto / totalVentas) : 0,
         mediosPago: mediosPagoOrdenados,
+        totalEgresos,
+        egresosCategorias,
         dateFrom, dateTo
       }
     });
+
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
