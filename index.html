@@ -68,9 +68,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);transition:box-shadow 0.15s;}
 .kpi-card:hover{box-shadow:var(--shadow-md);}
 .kpi-card.featured{border-color:#C7D2FE;background:linear-gradient(135deg,#F0EFFE 0%,#fff 60%);}
+.kpi-card.red-card{border-color:#FECACA;background:linear-gradient(135deg,#FEF2F2 0%,#fff 60%);}
 .kpi-label{font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
 .kpi-value{font-size:26px;font-weight:800;color:var(--text);letter-spacing:-0.8px;line-height:1;}
 .kpi-value.accent{color:var(--accent);}
+.kpi-value.red{color:var(--red);}
 .kpi-sub{font-size:11.5px;color:var(--text3);margin-top:6px;}
 .kpi-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:10px;font-size:10.5px;font-weight:600;margin-top:8px;}
 .kpi-tag.green{background:var(--green-bg);color:var(--green);}
@@ -78,6 +80,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .kpi-tag.accent{background:var(--accent-bg);color:var(--accent);}
 .kpi-tag.amber{background:var(--amber-bg);color:var(--amber);}
 .kpi-tag.red{background:var(--red-bg);color:var(--red);}
+.kpi-row2{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+.kpi2{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);}
+.kpi2-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.kpi2-value{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.3px;}
+.kpi2-sub{font-size:10.5px;color:var(--text3);margin-top:3px;}
 .body-grid-2{display:grid;grid-template-columns:1fr 300px;gap:16px;}
 .body-grid-equal{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
@@ -90,6 +97,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .bar-name{font-size:12px;color:var(--text2);width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .bar-track{flex:1;height:6px;background:var(--border);border-radius:10px;overflow:hidden;}
 .bar-fill{height:100%;border-radius:10px;background:var(--accent);transition:width 0.8s cubic-bezier(0.4,0,0.2,1);}
+.bar-fill.red{background:var(--red);}
 .bar-val{font-size:12px;font-weight:700;color:var(--text);min-width:85px;text-align:right;white-space:nowrap;}
 .bar-pct{font-size:10px;color:var(--text3);min-width:34px;text-align:right;}
 .sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
@@ -98,6 +106,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .sum-val{font-size:17px;font-weight:800;color:var(--text);margin-top:3px;letter-spacing:-0.3px;}
 .sum-val.accent{color:var(--accent);}
 .sum-val.green{color:var(--green);}
+.sum-val.red{color:var(--red);}
 .sum-sub{font-size:10px;color:var(--text3);margin-top:2px;}
 .empty{text-align:center;padding:32px 20px;color:var(--text3);font-size:13px;}
 .period-display{font-size:12px;color:var(--text3);font-weight:500;}
@@ -122,8 +131,20 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .hora-label{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:600;color:#fff;white-space:nowrap;}
 .hora-stats{font-size:11px;color:var(--text2);font-weight:600;min-width:85px;text-align:right;white-space:nowrap;}
 .hora-count{font-size:10px;color:var(--text3);min-width:50px;text-align:right;}
+.tbl-wrap{overflow-x:auto;}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+.tbl th{text-align:left;padding:9px 18px;color:var(--text3);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border2);white-space:nowrap;}
+.tbl td{padding:10px 18px;color:var(--text2);border-bottom:1px solid var(--border2);white-space:nowrap;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:#FAFBFC;color:var(--text);}
+.tbl td.num{text-align:right;font-weight:700;color:var(--text);}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:600;}
+.badge.green{background:var(--green-bg);color:var(--green);}
+.badge.red{background:var(--red-bg);color:var(--red);}
+.badge.amber{background:var(--amber-bg);color:var(--amber);}
 @media(max-width:1100px){
   .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .kpi-row2{grid-template-columns:repeat(2,1fr);}
   .body-grid-2{grid-template-columns:1fr;}
   .body-grid-equal{grid-template-columns:1fr;}
 }
@@ -139,6 +160,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   .period-bar{padding:10px 14px;}
   .content{padding:14px;}
   .kpi-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .kpi-row2{grid-template-columns:1fr 1fr;gap:10px;}
   .kpi-value{font-size:20px;}
   .kpi-card{padding:14px 16px;}
   .menu-btn{display:flex !important;}
@@ -162,10 +184,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <div class="nav-item active" data-mod="dashboard" onclick="navigate(this)"><span>⬡</span> Dashboard</div>
     <div class="nav-item" data-mod="ventas" onclick="navigate(this)"><span>↗</span> Ventas</div>
     <div class="nav-item" data-mod="medios" onclick="navigate(this)"><span>◈</span> Medios de pago</div>
+    <div class="nav-item" data-mod="egresos" onclick="navigate(this)"><span>↙</span> Egresos</div>
     <div class="nav-section">Próximamente</div>
     <div class="nav-item disabled"><span>$</span> Cash Flow</div>
     <div class="nav-item disabled"><span>≡</span> P&L</div>
-    <div class="nav-item disabled"><span>◻</span> Egresos</div>
   </nav>
 </aside>
 <main class="main">
@@ -228,6 +250,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
           <div class="kpi-tag amber" id="d-delivery-tag">—</div>
         </div>
       </div>
+
+      <!-- Fila canales delivery -->
+      <div class="kpi-row2" id="d-delivery-row">
+        <div class="kpi2"><div class="kpi2-label">Rappi</div><div class="kpi2-value" id="d-rappi">—</div><div class="kpi2-sub" id="d-rappi-s">—</div></div>
+        <div class="kpi2"><div class="kpi2-label">Menú online</div><div class="kpi2-value" id="d-menu">—</div><div class="kpi2-sub" id="d-menu-s">—</div></div>
+        <div class="kpi2"><div class="kpi2-label">PedidosYa</div><div class="kpi2-value" id="d-py">—</div><div class="kpi2-sub" id="d-py-s">—</div></div>
+        <div class="kpi2"><div class="kpi2-label">Otras apps</div><div class="kpi2-value" id="d-otros">—</div><div class="kpi2-sub" id="d-otros-s">—</div></div>
+      </div>
+
       <div class="body-grid-2">
         <div class="card">
           <div class="card-head"><div class="card-title">Medios de pago</div><span class="card-meta" id="d-mp-meta">—</span></div>
@@ -240,8 +271,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
               <div class="sum-grid">
                 <div class="sum-item"><div class="sum-lbl">Total bruto</div><div class="sum-val accent" id="d-sum-total">—</div></div>
                 <div class="sum-item"><div class="sum-lbl">Ventas</div><div class="sum-val" id="d-sum-count">—</div></div>
-                <div class="sum-item"><div class="sum-lbl">Salón</div><div class="sum-val" id="d-sum-salon">—</div></div>
-                <div class="sum-item"><div class="sum-lbl">Apps</div><div class="sum-val" id="d-sum-delivery">—</div></div>
+                <div class="sum-item"><div class="sum-lbl">Egresos</div><div class="sum-val red" id="d-sum-egresos">—</div></div>
+                <div class="sum-item"><div class="sum-lbl">Resultado</div><div class="sum-val" id="d-sum-resultado">—</div></div>
               </div>
             </div>
           </div>
@@ -337,13 +368,61 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
         </div>
       </div>
     </div>
+
+    <!-- EGRESOS -->
+    <div class="module" id="mod-egresos">
+      <div class="kpi-grid" style="margin-bottom:16px">
+        <div class="kpi-card red-card">
+          <div class="kpi-label">Total egresos</div>
+          <div class="kpi-value red" id="eg-total">—</div>
+          <div class="kpi-sub" id="eg-total-sub">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Cantidad</div>
+          <div class="kpi-value" id="eg-count">—</div>
+          <div class="kpi-sub">Movimientos</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Promedio por egreso</div>
+          <div class="kpi-value" id="eg-avg">—</div>
+          <div class="kpi-sub">Por movimiento</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Resultado neto</div>
+          <div class="kpi-value" id="eg-resultado">—</div>
+          <div class="kpi-sub">Ventas menos egresos</div>
+        </div>
+      </div>
+      <div class="body-grid-equal" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Por categoría</div><span class="card-meta" id="eg-cat-meta">—</span></div>
+          <div class="card-body"><div class="bar-list" id="eg-categorias"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Por proveedor</div><span class="card-meta" id="eg-prov-meta">—</span></div>
+          <div class="card-body"><div class="bar-list" id="eg-proveedores"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Detalle de egresos</div><span class="card-meta" id="eg-tbl-meta">—</span></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Fecha</th><th>Descripción</th><th>Categoría</th><th>Proveedor</th><th>Medio</th><th>Estado</th><th style="text-align:right">Monto</th></tr></thead>
+            <tbody id="eg-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </main>
+
 <script>
 const $=id=>document.getElementById(id);
 const fmt=n=>{if(n==null||isNaN(n))return'—';if(Math.abs(n)>=1000000)return'$'+(n/1000000).toFixed(2).replace('.',',')+' M';return'$'+Math.round(n).toLocaleString('es-AR');};
 const fmtPct=n=>(n==null||isNaN(n))?'—':(n*100).toFixed(1)+'%';
-let SALES=[],SUMMARY={},PAYMENTS={},ORDERS={},SUMMARY_COMP={};
+const fmtDate=s=>{if(!s)return'—';try{return new Date(s+'T12:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'});}catch(e){return s.slice(0,10);}};
+
+let SALES=[],SUMMARY={},PAYMENTS={},ORDERS={},EXPENSES=[],SUMMARY_COMP={};
 let currentPeriod='today',currentFrom='',currentTo='',compMode='none';
 
 function getDateRange(p){
@@ -358,7 +437,6 @@ function getDateRange(p){
     case 'year':return{from:`${now.getFullYear()}-01-01`,to:f(now)};}
   const t=f(now);return{from:t,to:t};
 }
-
 function getCompRange(){
   const pad=n=>String(n).padStart(2,'0'),f=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
   if(compMode==='custom'){const cf=$('compFrom').value,ct=$('compTo').value;if(cf&&ct)return{from:cf,to:ct};return null;}
@@ -367,7 +445,6 @@ function getCompRange(){
   if(compMode==='month')return{from:f(new Date(dF.getFullYear(),dF.getMonth()-1,dF.getDate())),to:f(new Date(dT.getFullYear(),dT.getMonth()-1,dT.getDate()))};
   return null;
 }
-
 function setPeriod(btn){
   document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');currentPeriod=btn.dataset.period;
@@ -391,7 +468,7 @@ function navigate(item){
   document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));
   const mod=item.dataset.mod;
   $('mod-'+mod).classList.add('active');
-  $('pageTitle').textContent={dashboard:'Dashboard',ventas:'Ventas',medios:'Medios de Pago'}[mod];
+  $('pageTitle').textContent={dashboard:'Dashboard',ventas:'Ventas',medios:'Medios de Pago',egresos:'Egresos'}[mod];
   closeSidebar();renderModule(mod);
 }
 function openSidebar(){$('sidebar').classList.add('open');$('overlay').classList.add('active');}
@@ -410,7 +487,7 @@ async function loadData(){
   try{
     const json=await fetchFudo(currentFrom,currentTo);
     SALES=(json.data||[]).filter(s=>s.attributes?.saleState!=='CANCELED');
-    SUMMARY=json.summary||{};PAYMENTS=json.payments||{};ORDERS=json.orders||{};
+    SUMMARY=json.summary||{};PAYMENTS=json.payments||{};ORDERS=json.orders||{};EXPENSES=json.expenses||[];
     const n=SALES.length,hora=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
     setStatus('ok',`${n} ventas · última actualización ${hora}`);
     $('liveBadge').style.display='flex';$('liveText').textContent=`${n} ventas`;
@@ -439,7 +516,18 @@ function renderModule(mod){
   if(mod==='dashboard')renderDashboard();
   else if(mod==='ventas')renderVentas();
   else if(mod==='medios')renderMedios();
+  else if(mod==='egresos')renderEgresos();
 }
+
+function getOriginLabel(origin){
+  if(!origin||origin==='unknown')return null;
+  if(origin.includes('rappi'))return'Rappi';
+  if(origin.includes('pedidosya')||origin.includes('pedidos_ya'))return'PedidosYa';
+  if(origin.includes('online_menu'))return'Menú online';
+  if(origin.includes('justo'))return'Justo';
+  return'Otra app';
+}
+
 function renderDashboard(){
   const s=SALES,total=s.reduce((a,r)=>a+(r.attributes?.total||0),0),n=s.length;
   const ticket=n?total/n:0;
@@ -447,6 +535,23 @@ function renderDashboard(){
   const delivery=s.filter(r=>(r.attributes?.saleType||'').toUpperCase()==='DELIVERY');
   const tSalon=salon.reduce((a,r)=>a+(r.attributes?.total||0),0);
   const tDelivery=delivery.reduce((a,r)=>a+(r.attributes?.total||0),0);
+
+  // Canales delivery
+  const channels={rappi:0,menu:0,py:0,otros:0};
+  delivery.forEach(sale=>{
+    const orders=sale.relationships?.orders?.data||[];
+    const t=sale.attributes?.total||0;
+    if(!orders.length){channels.otros+=t;return;}
+    const origin=ORDERS[orders[0].id]||'unknown';
+    if(origin.includes('rappi'))channels.rappi+=t;
+    else if(origin.includes('pedidosya')||origin.includes('pedidos_ya'))channels.py+=t;
+    else if(origin.includes('online_menu'))channels.menu+=t;
+    else channels.otros+=t;
+  });
+
+  const totalEgresos=SUMMARY.totalEgresos||0;
+  const resultado=total-totalEgresos;
+
   $('d-total').textContent=fmt(total);$('d-total-sub').textContent=n+' ventas cerradas';
   $('d-total-tag').textContent=salon.length+' salón · '+delivery.length+' apps';
   $('d-ticket').textContent=fmt(ticket);$('d-ticket-big').textContent=fmt(ticket);
@@ -455,14 +560,28 @@ function renderDashboard(){
   $('d-salon-tag').textContent=salon.length+' ventas';
   $('d-delivery').textContent=fmt(tDelivery);$('d-delivery-sub').textContent=fmtPct(total?tDelivery/total:0)+' del total';
   $('d-delivery-tag').textContent=delivery.length+' pedidos';
+
+  $('d-rappi').textContent=channels.rappi>0?fmt(channels.rappi):'—';
+  $('d-rappi-s').textContent=channels.rappi>0?fmtPct(total?channels.rappi/total:0)+' del total':'Sin pedidos';
+  $('d-menu').textContent=channels.menu>0?fmt(channels.menu):'—';
+  $('d-menu-s').textContent=channels.menu>0?fmtPct(total?channels.menu/total:0)+' del total':'Sin pedidos';
+  $('d-py').textContent=channels.py>0?fmt(channels.py):'—';
+  $('d-py-s').textContent=channels.py>0?fmtPct(total?channels.py/total:0)+' del total':'Sin pedidos';
+  $('d-otros').textContent=channels.otros>0?fmt(channels.otros):'—';
+  $('d-otros-s').textContent=channels.otros>0?fmtPct(total?channels.otros/total:0)+' del total':'—';
+
   $('d-sum-total').textContent=fmt(total);$('d-sum-count').textContent=n;
-  $('d-sum-salon').textContent=fmt(tSalon);$('d-sum-delivery').textContent=fmt(tDelivery);
+  $('d-sum-egresos').textContent=totalEgresos>0?('-'+fmt(totalEgresos)):'$0';
+  $('d-sum-resultado').textContent=fmt(resultado);
+  if($('d-sum-resultado'))$('d-sum-resultado').style.color=resultado>=0?'var(--green)':'var(--red)';
+
   $('d-mp-meta').textContent=n+' ventas';
   const medios=SUMMARY.mediosPago||[],maxMP=medios.length>0?medios[0].total:1;
   $('d-medios').innerHTML=medios.length>0
     ?medios.map(m=>`<div class="bar-row"><div class="bar-name">${m.nombre}</div><div class="bar-track"><div class="bar-fill" style="width:${m.total/maxMP*100}%"></div></div><div class="bar-val">${fmt(m.total)}</div></div>`).join('')
     :'<div class="empty">Sin datos</div>';
 }
+
 function renderVentas(){
   const sales=SALES,total=sales.reduce((a,r)=>a+(r.attributes?.total||0),0),n=sales.length;
   const salon=sales.filter(s=>(s.attributes?.saleType||'').toUpperCase()!=='DELIVERY');
@@ -505,16 +624,10 @@ function renderVentas(){
   $('v-hora-meta').textContent=n+' ventas entre 10h y 00h';
   $('v-hora-chart').innerHTML=franjas.map(f=>{
     const pct=f.total/maxF*100;
-    return`<div class="hora-row">
-      <div class="hora-h">${f.h}h</div>
-      <div class="hora-track">
-        ${f.count>0?`<div class="hora-fill" style="width:${pct}%"></div><div class="hora-label">${f.count} venta${f.count>1?'s':''}</div>`:''}
-      </div>
-      <div class="hora-stats">${f.count>0?fmt(f.total):'—'}</div>
-      <div class="hora-count">${f.count>0?f.count+' vtas':''}</div>
-    </div>`;
+    return`<div class="hora-row"><div class="hora-h">${f.h}h</div><div class="hora-track">${f.count>0?`<div class="hora-fill" style="width:${pct}%"></div><div class="hora-label">${f.count} venta${f.count>1?'s':''}</div>`:''}</div><div class="hora-stats">${f.count>0?fmt(f.total):'—'}</div><div class="hora-count">${f.count>0?f.count+' vtas':''}</div></div>`;
   }).join('');
 }
+
 function renderMedios(){
   const medios=SUMMARY.mediosPago||[];
   const total=medios.reduce((a,m)=>a+m.total,0)||SALES.reduce((a,r)=>a+(r.attributes?.total||0),0);
@@ -530,6 +643,64 @@ function renderMedios(){
     ?medios.map(m=>`<div class="bar-row"><div class="bar-name">${m.nombre}</div><div class="bar-track"><div class="bar-fill" style="width:${m.total/maxV*100}%"></div></div><div class="bar-val">${fmt(m.total)}</div><div class="bar-pct">${fmtPct(total?m.total/total:0)}</div></div>`).join('')
     :'<div class="empty">Sin datos</div>';
 }
+
+function renderEgresos(){
+  const exp=EXPENSES;
+  const total=exp.reduce((a,e)=>a+e.amount,0);
+  const n=exp.length;
+  const avg=n?total/n:0;
+  const ventas=SUMMARY.totalBruto||0;
+  const resultado=ventas-total;
+
+  $('eg-total').textContent=fmt(total);
+  $('eg-total-sub').textContent=n+' movimientos';
+  $('eg-count').textContent=n;
+  $('eg-avg').textContent=fmt(avg);
+  $('eg-resultado').textContent=fmt(resultado);
+  if($('eg-resultado'))$('eg-resultado').style.color=resultado>=0?'var(--green)':'var(--red)';
+
+  // Por categoría
+  const cats=SUMMARY.egresosCategorias||[];
+  const maxCat=cats.length>0?cats[0].total:1;
+  $('eg-cat-meta').textContent=cats.length+' categorías';
+  $('eg-categorias').innerHTML=cats.length>0
+    ?cats.map(c=>`<div class="bar-row"><div class="bar-name">${c.nombre}</div><div class="bar-track"><div class="bar-fill red" style="width:${c.total/maxCat*100}%"></div></div><div class="bar-val">${fmt(c.total)}</div><div class="bar-pct">${fmtPct(total?c.total/total:0)}</div></div>`).join('')
+    :'<div class="empty">Sin egresos en el período</div>';
+
+  // Por proveedor
+  const provMap={};
+  exp.forEach(e=>{
+    if(!provMap[e.provider])provMap[e.provider]={total:0,count:0};
+    provMap[e.provider].total+=e.amount;
+    provMap[e.provider].count++;
+  });
+  const provs=Object.entries(provMap).sort((a,b)=>b[1].total-a[1].total);
+  const maxProv=provs.length>0?provs[0][1].total:1;
+  $('eg-prov-meta').textContent=provs.length+' proveedores';
+  $('eg-proveedores').innerHTML=provs.length>0
+    ?provs.map(([nombre,data])=>`<div class="bar-row"><div class="bar-name">${nombre}</div><div class="bar-track"><div class="bar-fill red" style="width:${data.total/maxProv*100}%"></div></div><div class="bar-val">${fmt(data.total)}</div><div class="bar-pct">${fmtPct(total?data.total/total:0)}</div></div>`).join('')
+    :'<div class="empty">Sin proveedores</div>';
+
+  // Tabla detalle
+  $('eg-tbl-meta').textContent=n+' registros';
+  const sorted=[...exp].sort((a,b)=>b.date.localeCompare(a.date));
+  $('eg-tbody').innerHTML=sorted.length>0
+    ?sorted.map(e=>{
+        const statusCls=e.status==='PAID'?'green':e.status==='PENDING'?'amber':'red';
+        const statusLabel=e.status==='PAID'?'Pagado':e.status==='PENDING'?'Pendiente':'Cancelado';
+        return`<tr>
+          <td>${fmtDate(e.date)}</td>
+          <td>${e.description}</td>
+          <td>${e.category}</td>
+          <td>${e.provider}</td>
+          <td>${e.paymentMethod}</td>
+          <td><span class="badge ${statusCls}">${statusLabel}</span></td>
+          <td class="num">${fmt(e.amount)}</td>
+        </tr>`;
+      }).join('')
+    :'<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text3)">Sin egresos en el período</td></tr>';
+}
+
 window.addEventListener('load',()=>{
   const now=new Date(),pad=n=>String(n).padStart(2,'0');
   const today=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
