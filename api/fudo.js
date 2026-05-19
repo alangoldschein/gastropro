@@ -27,10 +27,10 @@ export default async function handler(req, res) {
       return `${arg.getUTCFullYear()}-${pad(arg.getUTCMonth()+1)}-${pad(arg.getUTCDate())}`;
     };
 
-    // ── VENTAS con origin correcto ──
+    // VENTAS — sin fields[sale] para traer todos los atributos
     let allSales = [], allIncluded = [], page = 1, hasMore = true;
     while (hasMore) {
-      const url = `https://api.fu.do/v1alpha1/sales?sort=-id&page[size]=500&page[number]=${page}&include=orders&fields[sale]=orders&fields[order]=origin`;
+      const url = `https://api.fu.do/v1alpha1/sales?sort=-id&page[size]=500&page[number]=${page}&include=orders&fields[order]=origin`;
       const r = await fetch(url, { headers });
       const data = await r.json();
       const items = data.data || [];
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
       else { page++; if (page > 20) hasMore = false; }
     }
 
-    // ── PAYMENTS ──
+    // PAYMENTS
     const paymentIds = [];
     allSales.forEach(s => { (s.relationships?.payments?.data || []).forEach(p => paymentIds.push(p.id)); });
     const paymentsMap = {};
@@ -78,13 +78,13 @@ export default async function handler(req, res) {
       }
     }
 
-    // ── ORDERS MAP ──
+    // ORDERS MAP
     const ordersMap = {};
     allIncluded.forEach(inc => {
       if (inc.type === 'Order') ordersMap[inc.id] = inc.attributes?.origin || 'unknown';
     });
 
-    // ── EXPENSES ──
+    // EXPENSES
     let allExpenses = [];
     let expPage = 1, expHasMore = true;
     while (expHasMore) {
@@ -93,16 +93,12 @@ export default async function handler(req, res) {
       const expData = await expRes.json();
       const expItems = expData.data || [];
       const expIncluded = expData.included || [];
-
-      // Mapas de includes
       const catMap = {}, provMap = {}, pmMap = {};
       expIncluded.forEach(inc => {
         if (inc.type === 'ExpenseCategory') catMap[inc.id] = inc.attributes?.name || 'Sin categoría';
         if (inc.type === 'Provider') provMap[inc.id] = inc.attributes?.name || '—';
         if (inc.type === 'PaymentMethod') pmMap[inc.id] = inc.attributes?.name || '—';
       });
-
-      // Filtrar por fecha argentina
       const filtered = expItems.filter(e => {
         const d = (e.attributes?.date || '').slice(0, 10);
         return d >= dateFrom && d <= dateTo;
@@ -116,16 +112,14 @@ export default async function handler(req, res) {
         provider: provMap[e.relationships?.provider?.data?.id] || '—',
         paymentMethod: pmMap[e.relationships?.paymentMethod?.data?.id] || '—'
       }));
-
       allExpenses = allExpenses.concat(filtered);
-
       const oldestExp = expItems[expItems.length - 1];
       const oldestExpDate = oldestExp ? (oldestExp.attributes?.date || '').slice(0, 10) : '';
       if (oldestExpDate < dateFrom || expItems.length < 500) expHasMore = false;
       else { expPage++; if (expPage > 20) expHasMore = false; }
     }
 
-    // ── TOTALES VENTAS ──
+    // TOTALES VENTAS
     let totalBruto = 0, totalSalon = 0, totalDelivery = 0, countSalon = 0, countDelivery = 0;
     const mediosPago = {};
     allSales.forEach(s => {
@@ -147,7 +141,7 @@ export default async function handler(req, res) {
       });
     });
 
-    // ── TOTALES EGRESOS ──
+    // TOTALES EGRESOS
     const totalEgresos = allExpenses.reduce((a, e) => a + e.amount, 0);
     const egresosPorCategoria = {};
     allExpenses.forEach(e => {
