@@ -78,6 +78,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .kpi-tag.accent{background:var(--accent-bg);color:var(--accent);}
 .kpi-tag.amber{background:var(--amber-bg);color:var(--amber);}
 .kpi-tag.red{background:var(--red-bg);color:var(--red);}
+.kpi-row2{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+.kpi2{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);}
+.kpi2-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.kpi2-value{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.3px;}
+.kpi2-sub{font-size:10.5px;color:var(--text3);margin-top:3px;}
 .body-grid-2{display:grid;grid-template-columns:1fr 300px;gap:16px;}
 .body-grid-equal{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
@@ -88,7 +93,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .bar-list{display:flex;flex-direction:column;gap:10px;}
 .bar-row{display:flex;align-items:center;gap:10px;}
 .bar-name{font-size:12px;color:var(--text2);width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.bar-track{flex:1;height:6px;background:var(--border);border-radius:10px;overflow:hidden;}
+.bar-track{flex:1;height:8px;background:var(--border);border-radius:10px;overflow:hidden;}
 .bar-fill{height:100%;border-radius:10px;background:var(--accent);transition:width 0.8s cubic-bezier(0.4,0,0.2,1);}
 .bar-val{font-size:12px;font-weight:700;color:var(--text);min-width:85px;text-align:right;white-space:nowrap;}
 .bar-pct{font-size:10px;color:var(--text3);min-width:34px;text-align:right;}
@@ -98,6 +103,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .sum-val{font-size:17px;font-weight:800;color:var(--text);margin-top:3px;letter-spacing:-0.3px;}
 .sum-val.accent{color:var(--accent);}
 .sum-val.green{color:var(--green);}
+.sum-val.red{color:var(--red);}
 .sum-sub{font-size:10px;color:var(--text3);margin-top:2px;}
 .empty{text-align:center;padding:32px 20px;color:var(--text3);font-size:13px;}
 .period-display{font-size:12px;color:var(--text3);font-weight:500;}
@@ -122,10 +128,22 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .hora-label{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:600;color:#fff;white-space:nowrap;}
 .hora-stats{font-size:11px;color:var(--text2);font-weight:600;min-width:85px;text-align:right;white-space:nowrap;}
 .hora-count{font-size:10px;color:var(--text3);min-width:50px;text-align:right;}
+.rk-upload{border:2px dashed var(--border);border-radius:var(--radius);padding:48px 24px;text-align:center;cursor:pointer;transition:all 0.15s;background:var(--surface);}
+.rk-upload:hover{border-color:var(--accent);background:var(--accent-bg);}
+.rk-filter-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);}
+.rk-select{padding:7px 12px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit;color:var(--text);background:var(--surface);outline:none;cursor:pointer;font-weight:500;}
+.rk-cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.rk-cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.rk-cat-bar{position:absolute;bottom:0;left:0;height:3px;background:var(--accent);transition:width 0.8s cubic-bezier(0.4,0,0.2,1);}
+.rk-cat-name{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;}
+.rk-cat-val{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.5px;}
+.rk-cat-sub{font-size:10.5px;color:var(--text3);margin-top:2px;}
 @media(max-width:1100px){
   .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .kpi-row2{grid-template-columns:repeat(2,1fr);}
   .body-grid-2{grid-template-columns:1fr;}
   .body-grid-equal{grid-template-columns:1fr;}
+  .rk-cat-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media(max-width:768px){
   :root{--sidebar:0px;}
@@ -139,10 +157,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   .period-bar{padding:10px 14px;}
   .content{padding:14px;}
   .kpi-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .kpi-row2{grid-template-columns:1fr 1fr;gap:10px;}
   .kpi-value{font-size:20px;}
   .kpi-card{padding:14px 16px;}
   .menu-btn{display:flex !important;}
   .btn{padding:6px 10px;font-size:11.5px;}
+  .rk-cat-grid{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
@@ -161,7 +181,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <div class="nav-section">Módulos</div>
     <div class="nav-item active" data-mod="dashboard" onclick="navigate(this)"><span>⬡</span> Dashboard</div>
     <div class="nav-item" data-mod="ventas" onclick="navigate(this)"><span>↗</span> Ventas</div>
-    <div class="nav-item" data-mod="medios" onclick="navigate(this)"><span>◈</span> Medios de pago</div>
     <div class="nav-item" data-mod="egresos" onclick="navigate(this)"><span>↙</span> Egresos</div>
     <div class="nav-item" data-mod="rankings" onclick="navigate(this)"><span>★</span> Rankings</div>
     <div class="nav-section">Próximamente</div>
@@ -229,6 +248,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
           <div class="kpi-tag amber" id="d-delivery-tag">—</div>
         </div>
       </div>
+      <div class="kpi-row2">
+        <div class="kpi2"><div class="kpi2-label">Rappi</div><div class="kpi2-value" id="d-rappi">—</div><div class="kpi2-sub" id="d-rappi-s">—</div></div>
+        <div class="kpi2"><div class="kpi2-label">Menú online</div><div class="kpi2-value" id="d-menu">—</div><div class="kpi2-sub" id="d-menu-s">—</div></div>
+        <div class="kpi2"><div class="kpi2-label">PedidosYa</div><div class="kpi2-value" id="d-py">—</div><div class="kpi2-sub" id="d-py-s">—</div></div>
+        <div class="kpi2"><div class="kpi2-label">Otras apps</div><div class="kpi2-value" id="d-otros">—</div><div class="kpi2-sub" id="d-otros-s">—</div></div>
+      </div>
       <div class="body-grid-2">
         <div class="card">
           <div class="card-head"><div class="card-title">Medios de pago</div><span class="card-meta" id="d-mp-meta">—</span></div>
@@ -241,7 +266,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
               <div class="sum-grid">
                 <div class="sum-item"><div class="sum-lbl">Total bruto</div><div class="sum-val accent" id="d-sum-total">—</div></div>
                 <div class="sum-item"><div class="sum-lbl">Ventas</div><div class="sum-val" id="d-sum-count">—</div></div>
-                <div class="sum-item"><div class="sum-lbl">Salón</div><div class="sum-val" id="d-sum-salon">—</div></div>
+                <div class="sum-item"><div class="sum-lbl">Egresos</div><div class="sum-val red" id="d-sum-egresos">—</div></div>
                 <div class="sum-item"><div class="sum-lbl">Apps</div><div class="sum-val" id="d-sum-delivery">—</div></div>
               </div>
             </div>
@@ -336,26 +361,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       </div>
     </div>
 
-    <!-- MEDIOS -->
-    <div class="module" id="mod-medios">
-      <div class="kpi-grid" style="margin-bottom:16px">
-        <div class="kpi-card featured"><div class="kpi-label">Total cobrado</div><div class="kpi-value accent" id="mp-total">—</div><div class="kpi-sub">Suma de todos los medios</div></div>
-        <div class="kpi-card"><div class="kpi-label">Efectivo</div><div class="kpi-value" id="mp-efec">—</div><div class="kpi-sub" id="mp-efec-s">—</div></div>
-        <div class="kpi-card"><div class="kpi-label">Digital / QR</div><div class="kpi-value" id="mp-dig">—</div><div class="kpi-sub" id="mp-dig-s">—</div></div>
-        <div class="kpi-card"><div class="kpi-label">Tarjeta</div><div class="kpi-value" id="mp-card">—</div><div class="kpi-sub" id="mp-card-s">—</div></div>
-      </div>
-      <div class="body-grid-2">
-        <div class="card">
-          <div class="card-head"><div class="card-title">Desglose por medio</div><span class="card-meta">Nombres reales de Fudo</span></div>
-          <div class="card-body"><div class="bar-list" id="mp-bars"></div></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><div class="card-title">Proyección de acreditación</div><span class="card-meta" style="color:var(--amber)">Próximamente</span></div>
-          <div class="card-body"><p style="font-size:12.5px;color:var(--text3);line-height:1.7">Cuándo acredita cada medio: efectivo disponible hoy, QR en 1-2 días, débito en 2-3 días, crédito en 18-21 días, apps según contrato.</p></div>
-        </div>
-      </div>
-    </div>
-
     <!-- EGRESOS -->
     <div class="module" id="mod-egresos">
       <div class="kpi-grid" style="margin-bottom:16px">
@@ -399,54 +404,53 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
     <!-- RANKINGS -->
     <div class="module" id="mod-rankings">
-      <div id="rk-upload-zone" style="border:2px dashed var(--border);border-radius:var(--radius);padding:40px;text-align:center;margin-bottom:20px;cursor:pointer;transition:all 0.15s;background:var(--surface)" onclick="document.getElementById('rk-file-input').click()" ondragover="event.preventDefault();this.style.borderColor='var(--accent)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleDrop(event)">
-        <div style="font-size:28px;margin-bottom:10px">📊</div>
-        <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px">Subí el Reporte de Productos de Fudo</div>
-        <div style="font-size:12px;color:var(--text3)">Arrastrá el archivo acá o hacé clic · Exportá desde Fudo → Reportes → Productos</div>
+      <div class="rk-upload" id="rk-upload-zone" onclick="document.getElementById('rk-file-input').click()" ondragover="event.preventDefault();this.style.borderColor='var(--accent)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleDrop(event)">
+        <div style="font-size:32px;margin-bottom:12px">📊</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px">Subí el Reporte de Productos</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:16px">Exportá desde Fudo → Reportes → Productos · Arrastrá acá o hacé clic</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;padding:8px 18px;border-radius:6px;font-size:12px;font-weight:600">↑ Seleccionar archivo</div>
         <input type="file" id="rk-file-input" accept=".xlsx" style="display:none" onchange="handleFile(this.files[0])">
       </div>
-      <div id="rk-loading" style="display:none;text-align:center;padding:40px;color:var(--text3)">
-        <div class="spinner" style="margin:0 auto 12px"></div>
-        <div style="font-size:13px">Procesando archivo...</div>
+      <div id="rk-loading" style="display:none;text-align:center;padding:60px;color:var(--text3)">
+        <div class="spinner" style="margin:0 auto 14px;width:24px;height:24px;border-width:3px"></div>
+        <div style="font-size:13px;font-weight:500">Procesando archivo...</div>
       </div>
       <div id="rk-content" style="display:none">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <div class="rk-filter-bar">
           <div>
-            <div style="font-size:13px;font-weight:600;color:var(--text)" id="rk-periodo">—</div>
-            <div style="font-size:11px;color:var(--text3)" id="rk-subtitulo">—</div>
+            <div style="font-size:14px;font-weight:700;color:var(--text)" id="rk-periodo-label">—</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px" id="rk-subtitulo">—</div>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <select id="rk-mes-filter" onchange="renderRankings()" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit;color:var(--text);background:var(--surface);outline:none;cursor:pointer">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <select class="rk-select" id="rk-mes-filter" onchange="renderRankings()">
               <option value="all">Todo el período</option>
             </select>
-            <button class="btn" onclick="document.getElementById('rk-file-input').click()" style="font-size:11px">↑ Cambiar archivo</button>
+            <button class="btn" onclick="document.getElementById('rk-file-input').click()" style="font-size:11px">↑ Cambiar</button>
           </div>
         </div>
         <div class="kpi-grid" style="margin-bottom:16px">
           <div class="kpi-card featured"><div class="kpi-label">Ingreso total</div><div class="kpi-value accent" id="rk-total">—</div><div class="kpi-sub" id="rk-total-sub">—</div></div>
-          <div class="kpi-card"><div class="kpi-label">Unidades vendidas</div><div class="kpi-value" id="rk-units">—</div><div class="kpi-sub" id="rk-units-sub">—</div></div>
-          <div class="kpi-card"><div class="kpi-label">Ticket unitario</div><div class="kpi-value" id="rk-ticket">—</div><div class="kpi-sub">Por unidad vendida</div></div>
-          <div class="kpi-card"><div class="kpi-label">Producto estrella</div><div class="kpi-value" style="font-size:15px;line-height:1.2" id="rk-star">—</div><div class="kpi-sub" id="rk-star-sub">—</div></div>
+          <div class="kpi-card"><div class="kpi-label">Unidades vendidas</div><div class="kpi-value" id="rk-units">—</div><div class="kpi-sub">unidades totales</div></div>
+          <div class="kpi-card"><div class="kpi-label">Ticket unitario</div><div class="kpi-value" id="rk-ticket">—</div><div class="kpi-sub">ingreso por unidad</div></div>
+          <div class="kpi-card"><div class="kpi-label">Producto #1</div><div class="kpi-value" style="font-size:15px;line-height:1.3" id="rk-star">—</div><div class="kpi-sub" id="rk-star-sub">—</div></div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-head"><div class="card-title">Por categoría</div><span class="card-meta" id="rk-cat-meta">—</span></div>
+          <div class="card-body"><div class="rk-cat-grid" id="rk-cat-grid"></div></div>
         </div>
         <div class="body-grid-equal" style="margin-bottom:16px">
           <div class="card">
-            <div class="card-head"><div class="card-title">Por categoría</div><span class="card-meta" id="rk-cat-meta">—</span></div>
-            <div class="card-body"><div class="bar-list" id="rk-categorias"></div></div>
-          </div>
-          <div class="card">
-            <div class="card-head"><div class="card-title">Top 10 por ingreso</div><span class="card-meta">$ vendido</span></div>
+            <div class="card-head"><div class="card-title">Top 10 — Mayor ingreso</div><span class="card-meta" style="color:var(--accent)">$ total</span></div>
             <div class="card-body"><div class="bar-list" id="rk-top-ingreso"></div></div>
           </div>
-        </div>
-        <div class="body-grid-equal">
           <div class="card">
-            <div class="card-head"><div class="card-title">Top 10 por unidades</div><span class="card-meta">Más vendidos</span></div>
+            <div class="card-head"><div class="card-title">Top 10 — Más vendidos</div><span class="card-meta" style="color:var(--green)">unidades</span></div>
             <div class="card-body"><div class="bar-list" id="rk-top-cantidad"></div></div>
           </div>
-          <div class="card">
-            <div class="card-head"><div class="card-title">Top 10 ticket unitario</div><span class="card-meta">$ por unidad · mín 10 uds</span></div>
-            <div class="card-body"><div class="bar-list" id="rk-top-ticket"></div></div>
-          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Top 10 — Mayor precio unitario</div><span class="card-meta" style="color:var(--amber)">$ por unidad · mín 10 vendidas</span></div>
+          <div class="card-body"><div class="bar-list" id="rk-top-ticket"></div></div>
         </div>
       </div>
     </div>
@@ -456,7 +460,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 <script>
 const $=id=>document.getElementById(id);
 const fmt=n=>{if(n==null||isNaN(n))return'—';if(Math.abs(n)>=1000000)return'$'+(n/1000000).toFixed(2).replace('.',',')+' M';return'$'+Math.round(n).toLocaleString('es-AR');};
+const fmtN=n=>Math.round(n).toLocaleString('es-AR');
 const fmtPct=n=>(n==null||isNaN(n))?'—':(n*100).toFixed(1)+'%';
+const MN={'01':'Enero','02':'Febrero','03':'Marzo','04':'Abril','05':'Mayo','06':'Junio','07':'Julio','08':'Agosto','09':'Septiembre','10':'Octubre','11':'Noviembre','12':'Diciembre'};
 let SALES=[],SUMMARY={},PAYMENTS={},ORDERS={},EXPENSES=[],SUMMARY_COMP={};
 let currentPeriod='today',currentFrom='',currentTo='',compMode='none';
 function getDateRange(p){
@@ -502,7 +508,7 @@ function navigate(item){
   document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));
   const mod=item.dataset.mod;
   $('mod-'+mod).classList.add('active');
-  $('pageTitle').textContent={dashboard:'Dashboard',ventas:'Ventas',medios:'Medios de Pago',egresos:'Egresos',rankings:'Rankings'}[mod];
+  $('pageTitle').textContent={dashboard:'Dashboard',ventas:'Ventas',egresos:'Egresos',rankings:'Rankings'}[mod];
   closeSidebar();renderModule(mod);
 }
 function openSidebar(){$('sidebar').classList.add('open');$('overlay').classList.add('active');}
@@ -527,7 +533,7 @@ async function loadData(){
     $('liveBadge').style.display='flex';$('liveText').textContent=`${n} ventas`;
     if(compMode!=='none')await loadComp();
     const mod=document.querySelector('.module.active')?.id?.replace('mod-','');
-    if(mod)renderModule(mod);
+    if(mod&&mod!=='rankings')renderModule(mod);
   }catch(e){setStatus('error','Error: '+e.message);}
 }
 async function loadComp(){
@@ -549,8 +555,8 @@ async function setComp(mode){
 function renderModule(mod){
   if(mod==='dashboard')renderDashboard();
   else if(mod==='ventas')renderVentas();
-  else if(mod==='medios')renderMedios();
   else if(mod==='egresos')renderEgresos();
+  else if(mod==='rankings')renderRankings();
 }
 function renderDashboard(){
   const s=SALES,total=s.reduce((a,r)=>a+(r.attributes?.total||0),0),n=s.length;
@@ -559,6 +565,17 @@ function renderDashboard(){
   const delivery=s.filter(r=>(r.attributes?.saleType||'').toUpperCase()==='DELIVERY');
   const tSalon=salon.reduce((a,r)=>a+(r.attributes?.total||0),0);
   const tDelivery=delivery.reduce((a,r)=>a+(r.attributes?.total||0),0);
+  const channels={rappi:0,menu:0,py:0,otros:0};
+  delivery.forEach(sale=>{
+    const orders=sale.relationships?.orders?.data||[],t=sale.attributes?.total||0;
+    if(!orders.length){channels.otros+=t;return;}
+    const origin=ORDERS[orders[0].id]||'unknown';
+    if(origin.includes('rappi'))channels.rappi+=t;
+    else if(origin.includes('pedidosya')||origin.includes('pedidos_ya'))channels.py+=t;
+    else if(origin.includes('online_menu'))channels.menu+=t;
+    else channels.otros+=t;
+  });
+  const totalEgresos=EXPENSES.filter(e=>e.status==='PAID').reduce((a,e)=>a+e.amount,0);
   $('d-total').textContent=fmt(total);$('d-total-sub').textContent=n+' ventas cerradas';
   $('d-total-tag').textContent=salon.length+' salón · '+delivery.length+' apps';
   $('d-ticket').textContent=fmt(ticket);$('d-ticket-big').textContent=fmt(ticket);
@@ -567,8 +584,13 @@ function renderDashboard(){
   $('d-salon-tag').textContent=salon.length+' ventas';
   $('d-delivery').textContent=fmt(tDelivery);$('d-delivery-sub').textContent=fmtPct(total?tDelivery/total:0)+' del total';
   $('d-delivery-tag').textContent=delivery.length+' pedidos';
+  $('d-rappi').textContent=channels.rappi>0?fmt(channels.rappi):'—';$('d-rappi-s').textContent=channels.rappi>0?fmtPct(total?channels.rappi/total:0)+' del total':'Sin pedidos';
+  $('d-menu').textContent=channels.menu>0?fmt(channels.menu):'—';$('d-menu-s').textContent=channels.menu>0?fmtPct(total?channels.menu/total:0)+' del total':'Sin pedidos';
+  $('d-py').textContent=channels.py>0?fmt(channels.py):'—';$('d-py-s').textContent=channels.py>0?fmtPct(total?channels.py/total:0)+' del total':'Sin pedidos';
+  $('d-otros').textContent=channels.otros>0?fmt(channels.otros):'—';$('d-otros-s').textContent=channels.otros>0?fmtPct(total?channels.otros/total:0)+' del total':'—';
   $('d-sum-total').textContent=fmt(total);$('d-sum-count').textContent=n;
-  $('d-sum-salon').textContent=fmt(tSalon);$('d-sum-delivery').textContent=fmt(tDelivery);
+  $('d-sum-egresos').textContent=totalEgresos>0?('-'+fmt(totalEgresos)):'$0';
+  $('d-sum-delivery').textContent=fmt(tDelivery);
   $('d-mp-meta').textContent=n+' ventas';
   const medios=SUMMARY.mediosPago||[],maxMP=medios.length>0?medios[0].total:1;
   $('d-medios').innerHTML=medios.length>0
@@ -644,21 +666,6 @@ function renderVentas(){
     return`<div class="hora-row"><div class="hora-h">${f.h}h</div><div class="hora-track">${f.count>0?`<div class="hora-fill" style="width:${pct}%"></div><div class="hora-label">${f.count} venta${f.count>1?'s':''}</div>`:''}</div><div class="hora-stats">${f.count>0?fmt(f.total):'—'}</div><div class="hora-count">${f.count>0?f.count+' vtas':''}</div></div>`;
   }).join('');
 }
-function renderMedios(){
-  const medios=SUMMARY.mediosPago||[];
-  const total=medios.reduce((a,m)=>a+m.total,0)||SALES.reduce((a,r)=>a+(r.attributes?.total||0),0);
-  $('mp-total').textContent=fmt(total);
-  const classify=n=>{const s=(n||'').toLowerCase();if(s.includes('efectivo')||s.includes('cash'))return'efec';if(s.includes('qr')||s.includes('nave')||s.includes('mercado')||s.includes('modo')||s.includes('transferencia'))return'dig';if(s.includes('crédit')||s.includes('credit')||s.includes('debit')||s.includes('débito')||s.includes('visa')||s.includes('master'))return'card';return'otro';};
-  let tE=0,tD=0,tC=0;
-  medios.forEach(m=>{const t=classify(m.nombre);if(t==='efec')tE+=m.total;else if(t==='dig')tD+=m.total;else if(t==='card')tC+=m.total;});
-  $('mp-efec').textContent=tE>0?fmt(tE):'—';$('mp-efec-s').textContent=tE>0?fmtPct(total?tE/total:0)+' del total':'Sin datos';
-  $('mp-dig').textContent=tD>0?fmt(tD):'—';$('mp-dig-s').textContent=tD>0?fmtPct(total?tD/total:0)+' del total':'Sin datos';
-  $('mp-card').textContent=tC>0?fmt(tC):'—';$('mp-card-s').textContent=tC>0?fmtPct(total?tC/total:0)+' del total':'Sin datos';
-  const maxV=medios.length>0?medios[0].total:1;
-  $('mp-bars').innerHTML=medios.length>0
-    ?medios.map(m=>`<div class="bar-row"><div class="bar-name">${m.nombre}</div><div class="bar-track"><div class="bar-fill" style="width:${m.total/maxV*100}%"></div></div><div class="bar-val">${fmt(m.total)}</div><div class="bar-pct">${fmtPct(total?m.total/total:0)}</div></div>`).join('')
-    :'<div class="empty">Sin datos</div>';
-}
 function renderEgresos(){
   const exp=EXPENSES,total=exp.reduce((a,e)=>a+e.amount,0),n=exp.length;
   const ventas=SUMMARY.totalBruto||0,neto=ventas-total;
@@ -688,11 +695,9 @@ function renderEgresos(){
       }).join('')
     :'<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text3)">Sin egresos en el período</td></tr>';
 }
-// ── RANKINGS ──
 let RK_DATA=[];
 function handleDrop(e){
-  e.preventDefault();
-  $('rk-upload-zone').style.borderColor='var(--border)';
+  e.preventDefault();$('rk-upload-zone').style.borderColor='var(--border)';
   const f=e.dataTransfer.files[0];if(f)handleFile(f);
 }
 function handleFile(file){
@@ -701,22 +706,28 @@ function handleFile(file){
   $('rk-loading').style.display='block';
   $('rk-content').style.display='none';
   const reader=new FileReader();
-  reader.onload=e=>{
+  reader.onload=ev=>{
     try{
-      const wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
+      const wb=XLSX.read(ev.target.result,{type:'array',cellDates:true});
       const ws=wb.Sheets['Detalle']||wb.Sheets[wb.SheetNames[0]];
       const rows=XLSX.utils.sheet_to_json(ws,{raw:false,dateNF:'yyyy-mm-dd'});
-      RK_DATA=rows.filter(r=>parseFloat(r['Monto total']||0)>0).map(r=>({
-        mes:r['Fecha']?(r['Fecha']+'').slice(0,7):'',
-        categoria:r['Categoría']||'Sin categoría',
-        producto:r['Producto']||'',
-        cantidad:parseFloat(r['Cantidades vendidas']||0),
-        monto:parseFloat(r['Monto total']||0),
-      }));
-      const meses=[...new Set(RK_DATA.map(r=>r.mes))].sort();
+      RK_DATA=[];
+      rows.forEach(r=>{
+        const monto=parseFloat((r['Monto total']||'').toString().replace(',','.'))||0;
+        const cant=parseFloat((r['Cantidades vendidas']||'').toString().replace(',','.'))||0;
+        if(monto<=0)return;
+        let mes='';
+        const fv=r['Fecha'];
+        if(fv&&typeof fv==='string'&&fv.length>=7){mes=fv.slice(0,7);}
+        else if(fv&&!isNaN(fv)){
+          const d=new Date(Math.round((parseFloat(fv)-25569)*86400*1000));
+          mes=`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}`;
+        }
+        RK_DATA.push({mes,categoria:(r['Categoría']||r['Categoria']||'Sin categoría').trim(),producto:(r['Producto']||'').trim(),cantidad:cant,monto});
+      });
+      const meses=[...new Set(RK_DATA.map(r=>r.mes).filter(Boolean))].sort();
       const sel=$('rk-mes-filter');
       sel.innerHTML='<option value="all">Todo el período</option>';
-      const MN={'01':'Enero','02':'Febrero','03':'Marzo','04':'Abril','05':'Mayo','06':'Junio','07':'Julio','08':'Agosto','09':'Septiembre','10':'Octubre','11':'Noviembre','12':'Diciembre'};
       meses.forEach(m=>{const[y,mo]=m.split('-');const o=document.createElement('option');o.value=m;o.textContent=(MN[mo]||mo)+' '+y;sel.appendChild(o);});
       $('rk-loading').style.display='none';
       $('rk-content').style.display='block';
@@ -724,45 +735,53 @@ function handleFile(file){
     }catch(err){
       $('rk-loading').style.display='none';
       $('rk-upload-zone').style.display='block';
-      alert('Error al leer el archivo: '+err.message);
+      alert('Error: '+err.message);
     }
   };
   reader.readAsArrayBuffer(file);
 }
 function renderRankings(){
-  const MN={'01':'Enero','02':'Febrero','03':'Marzo','04':'Abril','05':'Mayo','06':'Junio','07':'Julio','08':'Agosto','09':'Septiembre','10':'Octubre','11':'Noviembre','12':'Diciembre'};
   const mes=$('rk-mes-filter').value;
   const data=mes==='all'?RK_DATA:RK_DATA.filter(r=>r.mes===mes);
-  if(!data.length)return;
+  if(!data.length){$('rk-top-ingreso').innerHTML='<div class="empty">Sin datos</div>';return;}
   const totalMonto=data.reduce((a,r)=>a+r.monto,0);
   const totalUnits=data.reduce((a,r)=>a+r.cantidad,0);
   if(mes==='all'){
-    const meses=[...new Set(data.map(r=>r.mes))].sort();
-    const[y1,m1]=meses[0].split('-');const[y2,m2]=meses[meses.length-1].split('-');
-    $('rk-periodo').textContent=`${MN[m1]||m1} → ${MN[m2]||m2} ${y2}`;
-    $('rk-subtitulo').textContent=`${meses.length} meses · ${data.length} registros`;
-  }else{const[y,m]=mes.split('-');$('rk-periodo').textContent=`${MN[m]||m} ${y}`;$('rk-subtitulo').textContent=`${data.length} productos con venta`;}
+    const meses=[...new Set(data.map(r=>r.mes).filter(Boolean))].sort();
+    if(meses.length>=2){const[y1,m1]=meses[0].split('-');const[y2,m2]=meses[meses.length-1].split('-');$('rk-periodo-label').textContent=`${MN[m1]||m1} ${y1} → ${MN[m2]||m2} ${y2}`;}
+    else if(meses.length===1){const[y,m]=meses[0].split('-');$('rk-periodo-label').textContent=`${MN[m]||m} ${y}`;}
+    else{$('rk-periodo-label').textContent='Todo el período';}
+    $('rk-subtitulo').textContent=`${meses.length} mes${meses.length!==1?'es':''} · ${fmtN(data.length)} registros`;
+  }else{
+    const[y,m]=mes.split('-');
+    $('rk-periodo-label').textContent=`${MN[m]||m} ${y}`;
+    $('rk-subtitulo').textContent=`${fmtN(data.length)} productos con venta`;
+  }
   $('rk-total').textContent=fmt(totalMonto);
-  $('rk-units').textContent=Math.round(totalUnits).toLocaleString('es-AR');
-  $('rk-units-sub').textContent='unidades vendidas';
+  $('rk-total-sub').textContent=fmtN(totalUnits)+' unidades';
+  $('rk-units').textContent=fmtN(totalUnits);
   $('rk-ticket').textContent=fmt(totalUnits>0?totalMonto/totalUnits:0);
   const byProd={};
   data.forEach(r=>{if(!byProd[r.producto])byProd[r.producto]={monto:0,cantidad:0};byProd[r.producto].monto+=r.monto;byProd[r.producto].cantidad+=r.cantidad;});
   const topProd=Object.entries(byProd).sort((a,b)=>b[1].monto-a[1].monto);
-  if(topProd.length){$('rk-star').textContent=topProd[0][0];$('rk-star-sub').textContent=fmt(topProd[0][1].monto)+' · '+Math.round(topProd[0][1].cantidad)+' uds';}
+  if(topProd.length){$('rk-star').textContent=topProd[0][0];$('rk-star-sub').textContent=fmt(topProd[0][1].monto)+' · '+fmtN(topProd[0][1].cantidad)+' uds';}
   const byCat={};
   data.forEach(r=>{if(!byCat[r.categoria])byCat[r.categoria]={monto:0,cantidad:0};byCat[r.categoria].monto+=r.monto;byCat[r.categoria].cantidad+=r.cantidad;});
   const cats=Object.entries(byCat).sort((a,b)=>b[1].monto-a[1].monto);
-  const maxCat=cats[0]?cats[0][1].monto:1;
+  const maxCatM=cats[0]?cats[0][1].monto:1;
+  const catColors=['#5046E5','#059669','#D97706','#2563EB','#DC2626','#7C3AED','#0891B2','#BE185D','#EA580C'];
   $('rk-cat-meta').textContent=cats.length+' categorías';
-  $('rk-categorias').innerHTML=cats.map(([n,d])=>`<div class="bar-row"><div class="bar-name">${n}</div><div class="bar-track"><div class="bar-fill" style="width:${d.monto/maxCat*100}%"></div></div><div class="bar-val">${fmt(d.monto)}</div><div class="bar-pct">${fmtPct(totalMonto?d.monto/totalMonto:0)}</div></div>`).join('');
+  $('rk-cat-grid').innerHTML=cats.map(([nombre,d],i)=>`<div class="rk-cat-card"><div class="rk-cat-bar" style="width:${d.monto/maxCatM*100}%;background:${catColors[i%catColors.length]}"></div><div class="rk-cat-name">${nombre}</div><div class="rk-cat-val">${fmt(d.monto)}</div><div class="rk-cat-sub">${fmtN(d.cantidad)} uds · ${fmtPct(totalMonto?d.monto/totalMonto:0)}</div></div>`).join('');
   const top10i=topProd.slice(0,10),maxI=top10i[0]?top10i[0][1].monto:1;
-  $('rk-top-ingreso').innerHTML=top10i.map(([n,d])=>`<div class="bar-row"><div class="bar-name" title="${n}">${n}</div><div class="bar-track"><div class="bar-fill" style="width:${d.monto/maxI*100}%"></div></div><div class="bar-val">${fmt(d.monto)}</div><div class="bar-pct">${fmtPct(totalMonto?d.monto/totalMonto:0)}</div></div>`).join('');
-  const top10c=Object.entries(byProd).sort((a,b)=>b[1].cantidad-a[1].cantidad).slice(0,10),maxC=top10c[0]?top10c[0][1].cantidad:1;
-  $('rk-top-cantidad').innerHTML=top10c.map(([n,d])=>`<div class="bar-row"><div class="bar-name" title="${n}">${n}</div><div class="bar-track"><div class="bar-fill" style="width:${d.cantidad/maxC*100}%;background:#059669"></div></div><div class="bar-val">${Math.round(d.cantidad).toLocaleString('es-AR')} uds</div><div class="bar-pct">${fmtPct(totalUnits?d.cantidad/totalUnits:0)}</div></div>`).join('');
+  $('rk-top-ingreso').innerHTML=top10i.map(([n,d],i)=>`<div class="bar-row"><div style="font-size:11px;font-weight:700;color:var(--text3);min-width:18px">${i+1}</div><div class="bar-name" title="${n}">${n}</div><div class="bar-track"><div class="bar-fill" style="width:${d.monto/maxI*100}%"></div></div><div class="bar-val">${fmt(d.monto)}</div><div class="bar-pct">${fmtPct(totalMonto?d.monto/totalMonto:0)}</div></div>`).join('');
+  const top10c=Object.entries(byProd).sort((a,b)=>b[1].cantidad-a[1].cantidad).slice(0,10);
+  const maxC=top10c[0]?top10c[0][1].cantidad:1;
+  $('rk-top-cantidad').innerHTML=top10c.map(([n,d],i)=>`<div class="bar-row"><div style="font-size:11px;font-weight:700;color:var(--text3);min-width:18px">${i+1}</div><div class="bar-name" title="${n}">${n}</div><div class="bar-track"><div class="bar-fill" style="width:${d.cantidad/maxC*100}%;background:#059669"></div></div><div class="bar-val">${fmtN(d.cantidad)} uds</div><div class="bar-pct">${fmtPct(totalUnits?d.cantidad/totalUnits:0)}</div></div>`).join('');
   const top10t=Object.entries(byProd).filter(([,d])=>d.cantidad>=10).map(([n,d])=>([n,{...d,ticket:d.monto/d.cantidad}])).sort((a,b)=>b[1].ticket-a[1].ticket).slice(0,10);
   const maxT=top10t[0]?top10t[0][1].ticket:1;
-  $('rk-top-ticket').innerHTML=top10t.length>0?top10t.map(([n,d])=>`<div class="bar-row"><div class="bar-name" title="${n}">${n}</div><div class="bar-track"><div class="bar-fill" style="width:${d.ticket/maxT*100}%;background:#D97706"></div></div><div class="bar-val">${fmt(d.ticket)}</div><div class="bar-pct">${Math.round(d.cantidad)} uds</div></div>`).join(''):'<div class="empty">Necesitás más datos</div>';
+  $('rk-top-ticket').innerHTML=top10t.length>0
+    ?top10t.map(([n,d],i)=>`<div class="bar-row"><div style="font-size:11px;font-weight:700;color:var(--text3);min-width:18px">${i+1}</div><div class="bar-name" title="${n}">${n}</div><div class="bar-track"><div class="bar-fill" style="width:${d.ticket/maxT*100}%;background:#D97706"></div></div><div class="bar-val">${fmt(d.ticket)}</div><div class="bar-pct">${fmtN(d.cantidad)} uds</div></div>`).join('')
+    :'<div class="empty">Necesitás productos con más de 10 unidades vendidas</div>';
 }
 window.addEventListener('load',()=>{
   const now=new Date(),pad=n=>String(n).padStart(2,'0');
